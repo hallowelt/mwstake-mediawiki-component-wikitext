@@ -1,6 +1,6 @@
 {
 	"name": "mwstake/mediawiki-component-wikitext",
-	"description": "Provides wikitext handling and menu parsing",
+	"description": "Provides wikitext handling and tree parsing",
 	"license": "GPL-3.0-only",
 	"authors": [
 		{
@@ -13,7 +13,7 @@
 		"jakub-onderka/php-console-highlighter": "0.4.0",
 		"mediawiki/mediawiki-codesniffer": "29.0.0",
 		"mediawiki/minus-x": "1.0.0",
-		"phpunit/phpunit": "^6.5"
+		"phpunit/phpunit": "^8.5"
 	},
 	"autoload": {
 		"psr-4": {
