@@ -1,0 +1,101 @@
+<?php
+
+namespace MWStake\MediaWiki\Component\Wikitext;
+
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\MutableRevisionRecord;
+use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Revision\SlotRoleHandler;
+use MediaWiki\Storage\RevisionRecord;
+use MWParsoid\Config\DataAccess;
+use MWParsoid\Config\PageConfig;
+use MWParsoid\Config\PageConfigFactory;
+use Wikimedia\Parsoid\Config\SiteConfig;
+use Wikimedia\Parsoid\Parsoid;
+
+class ParserFactory {
+	/** @var \MWParsoid\Config\SiteConfig */
+	private $siteConfig;
+	/** @var DataAccess */
+	private $dataAccess;
+	/** @var INodeProcessor[] */
+	private $nodeProcessors;
+	/** @var TitleFactory */
+	private $titleFactory;
+	/** @var \Parser */
+	private $parser;
+	/** @var SlotRoleHandler */
+	private $slotRoleHandler;
+
+	public function __construct(
+		$nodeProcessors, \TitleFactory $titleFactory, RevisionStore $revisionStore,
+		\Parser $parser, SlotRoleHandler $slotRoleHandler
+	) {
+		$this->siteConfig = new \MWParsoid\Config\SiteConfig();
+		$this->dataAccess = new DataAccess( $revisionStore, $parser, \ParserOptions::newFromAnon() );
+		$this->parser = $parser;
+		$this->slotRoleHandler = $slotRoleHandler;
+		$this->nodeProcessors = $nodeProcessors;
+		$this->titleFactory = $titleFactory;
+	}
+
+	/**
+	 * Parse raw wikitext
+
+	 * @param string $text
+	 * @return WikitextParser
+	 */
+	public function newTextParser( $text ): WikitextParser {
+		$title = $this->titleFactory->newMainPage();
+		$record = $this->getRevisionForText( $text, $title );
+		return $this->newRevisionParser( $record );
+	}
+
+	/**
+	 * @param RevisionRecord $record
+	 * @return WikitextParser
+	 * @throws \Exception
+	 */
+	public function newRevisionParser( RevisionRecord $record ): WikitextParser {
+		$cm = $record->getContent( SlotRecord::MAIN )->getModel();
+		switch ( $cm ) {
+			case CONTENT_MODEL_WIKITEXT:
+				return new WikitextParser(
+					$record, $this->nodeProcessors, $this->siteConfig, $this->dataAccess,
+					$this->getPageConfig( $record )
+				);
+			default:
+				throw new \Exception( "Not supported content model: $cm" );
+		}
+
+	}
+
+	private function getRevisionForText( $text, $title ): RevisionRecord {
+		$content = new \WikitextContent( $text );
+		$revisionRecord = new MutableRevisionRecord( $title );
+		$revisionRecord->setSlot(
+			SlotRecord::newUnsaved(
+				SlotRecord::MAIN,
+				$content
+			)
+		);
+
+		return $revisionRecord;
+	}
+
+	/**
+	 * Page config object for parsoid
+	 *
+	 * @return PageConfig
+	 */
+	private function getPageConfig( RevisionRecord $record ) {
+		return new PageConfig(
+			$this->parser,
+			\ParserOptions::newFromAnon(),
+			$this->slotRoleHandler,
+			$record->getPageAsLinkTarget(),
+			$record
+		);
+	}
+}

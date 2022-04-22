@@ -2,9 +2,8 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
+use MediaWiki\Revision\RevisionRecord;
+
 interface IParser {
-	/**
-	 * @return INodeList
-	 */
-	public function getNodeList() :INodeList;
+	public function getRevision(): RevisionRecord;
 }
