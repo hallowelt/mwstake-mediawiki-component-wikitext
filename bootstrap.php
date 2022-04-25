@@ -16,7 +16,7 @@ MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 		$GLOBALS['wgServiceWiringFiles'][] = __DIR__ . '/ServiceWiring.php';
 
 		$GLOBALS['mwsgWikitextNodeProcessorRegistry'] = [
-			'translusion' => [
+			'transclusion' => [
 				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Transclusion::class
 			],
 			'header' => [

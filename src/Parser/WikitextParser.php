@@ -6,6 +6,7 @@ use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
+use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
 use MWStake\MediaWiki\Component\Wikitext\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
@@ -38,7 +39,6 @@ class WikitextParser implements IParser {
 		DataAccess $dataAccess, PageConfig $pageConfig
 	) {
 		$this->revision = $revision;
-		$this->rawWikitext = $revision->getContent( SlotRecord::MAIN )->getText();
 		$this->parsoid = new Parsoid( $siteConfig, $dataAccess );
 		$this->pageConfig = $pageConfig;
 		$this->nodeProcessors = $nodeProcessors;
@@ -49,11 +49,20 @@ class WikitextParser implements IParser {
 	 * @return INode[]
 	 */
 	public function parse( $nodeType = null ): array {
+		// Convert to HTML. This does:
+		// - tokenizes the document, reliably parsing different nodes
+		// - extracts all important info (like params for template, attributes of img...)
+		// - allows us to cast to DOMNode to easily acess those attributes
 		$data = $this->parsoid->wikitext2html( $this->pageConfig, [
 			'pageBundle' => true, 'body_only' => true, 'wrapSections' => false
 		] );
+		// There might be sligh differences between Parsoid-parsed WT and raw WT
+		// Convert back to WT and consider that the source text of the page
+		// This ensures that mutating the page will reliably replace nodes
+		$this->rawWikitext = $this->parsoidHtmlToWikitext( $data->html );
 
 		$this->dom = new \DOMDocument();
+		// DOMDocument does not like HTML5 tags (it loads them fine, just complains)
 		libxml_use_internal_errors( true );
 		$this->dom->loadHTML( $data->html );
 		libxml_clear_errors();
@@ -135,6 +144,7 @@ class WikitextParser implements IParser {
 				continue;
 			}
 
+			// Get WT for the node
 			$wikitext = $this->parsoidHtmlToWikitext( $this->dom->saveHTML( $node ) );
 			$this->nodes[] = $processor->getNode( $node, $attributes, $wikitext );
 		}

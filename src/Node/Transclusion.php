@@ -7,8 +7,6 @@ class Transclusion extends MutableNode {
 	private $target;
 	/** @var array */
 	private $params;
-	/** @var array */
-	private $nestedSubs = [];
 
 	/**
 	 * @param string $target
@@ -62,7 +60,6 @@ class Transclusion extends MutableNode {
 			if ( $value === $this->params[$index] ) {
 				return true;
 			}
-			$this->subOutNested();
 			if ( is_int( $index ) ) {
 				$this->setText( preg_replace(
 					'/\|' . $this->params[$index] . '/',
@@ -76,16 +73,7 @@ class Transclusion extends MutableNode {
 			}
 			$this->params[$index] = $value;
 		}
-		$this->restoreNested();
 
 		return false;
-	}
-
-	private function subOutNested() {
-
-	}
-
-	private function restoreNested() {
-
 	}
 }
