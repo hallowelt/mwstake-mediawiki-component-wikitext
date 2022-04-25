@@ -1,14 +1,12 @@
 <?php
 
-namespace MWStake\MediaWiki\Component\Wikitext;
+namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
-use MediaWiki\MediaWikiServices;
-use MediaWiki\Revision\MutableRevisionRecord;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
-use MWParsoid\Config\PageConfigFactory;
+use MWStake\MediaWiki\Component\Wikitext\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 
@@ -33,10 +31,11 @@ class WikitextParser implements IParser {
 	 * @param array $nodeProcessors
 	 * @param SiteConfig $siteConfig
 	 * @param DataAccess $dataAccess
+	 * @param PageConfig $pageConfig
 	 */
 	public function __construct(
 		RevisionRecord $revision, $nodeProcessors, SiteConfig $siteConfig,
-		DataAccess $dataAccess, PageConfig$pageConfig
+		DataAccess $dataAccess, PageConfig $pageConfig
 	) {
 		$this->revision = $revision;
 		$this->rawWikitext = $revision->getContent( SlotRecord::MAIN )->getText();
@@ -55,7 +54,9 @@ class WikitextParser implements IParser {
 		] );
 
 		$this->dom = new \DOMDocument();
+		libxml_use_internal_errors( true );
 		$this->dom->loadHTML( $data->html );
+		libxml_clear_errors();
 		$this->processDOMNode( $this->dom, $nodeType );
 
 		return $this->nodes;
@@ -69,9 +70,14 @@ class WikitextParser implements IParser {
 		if ( $node->getOriginalWikitext() === $node->getCurrentWikitext() ) {
 			return null;
 		}
-		return str_replace( $node->getOriginalWikitext(), $node->getCurrentWikitext(), $this->rawWikitext );
+		return str_replace(
+			$node->getOriginalWikitext(), $node->getCurrentWikitext(), $this->rawWikitext
+		);
 	}
 
+	/**
+	 * @return \MediaWiki\Revision\RevisionRecord
+	 */
 	public function getRevision(): \MediaWiki\Revision\RevisionRecord {
 		return $this->revision;
 	}
@@ -79,12 +85,13 @@ class WikitextParser implements IParser {
 	/**
 	 * Process DOMNode and create INode if possible
 	 * @param \DOMNode $dom
+	 * @param bool|null $nodeType Only process given nodeType (INodeProcessor key)
 	 */
 	private function processDOMNode( \DOMNode $dom, $nodeType = null ) {
 		foreach ( $dom->childNodes as $node ) {
 			$attributes = $this->extractNodeAttributes( $node );
 			$processChildren = $this->possiblyAddNode( $node, $attributes, $nodeType );
-			if( $node->hasChildNodes() ) {
+			if ( $node->hasChildNodes() ) {
 				$this->processDOMNode( $node, $nodeType );
 			}
 		}
@@ -95,6 +102,7 @@ class WikitextParser implements IParser {
 	 *
 	 * @param \DOMNode $node
 	 * @param array $attributes
+	 * @param bool|null $nodeType Only process given nodeType (INodeProcessor key)
 	 * @throws \Exception
 	 */
 	private function possiblyAddNode( \DOMNode $node, $attributes, $nodeType = null ) {
@@ -151,8 +159,6 @@ class WikitextParser implements IParser {
 
 	/**
 	 * @param string $html
-	 * @param Parsoid $parsoid
-	 * @param PageConfig $config
 	 * @return string
 	 */
 	private function parsoidHtmlToWikitext( $html ) {

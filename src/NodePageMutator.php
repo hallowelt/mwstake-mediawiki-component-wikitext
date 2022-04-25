@@ -7,7 +7,18 @@ use MediaWiki\Storage\SlotRecord;
 
 class NodePageMutator {
 
-	public function mutate( IParser $parser, INode $node, $user = null, $comment = '' ): ?RevisionRecord {
+	/**
+	 * @param IParser $parser
+	 * @param INode $node
+	 * @param null $user
+	 * @param string $comment
+	 * @return RevisionRecord|null
+	 * @throws \MWContentSerializationException
+	 * @throws \MWException
+	 */
+	public function mutate(
+		IParser $parser, INode $node, $user = null, $comment = ''
+	): ?RevisionRecord {
 		$newText = $parser->getMutatedText( $node );
 		if ( $newText === null ) {
 			// No change

@@ -2,50 +2,90 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Node;
 
-use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
-use MWStake\MediaWiki\Component\Wikitext\INode;
-
-class Transclusion implements INode, IMutableNode {
+class Transclusion extends MutableNode {
+	/** @var string */
 	private $target;
+	/** @var array */
 	private $params;
-	private $originalWikitext;
-	private $mutatedWikitext;
+	/** @var array */
+	private $nestedSubs = [];
 
+	/**
+	 * @param string $target
+	 * @param array $params
+	 * @param string $wikitext
+	 */
 	public function __construct( $target, $params, $wikitext ) {
 		$this->target = $target;
 		$this->params = $params;
-		$this->originalWikitext = $this->mutatedWikitext = $wikitext;
+		parent::__construct( $wikitext );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType(): string {
 		return 'transclusion';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTarget(): string {
 		return $this->target;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getParams(): array {
 		return $this->params;
 	}
 
+	/**
+	 * @param string $target
+	 */
 	public function setTarget( $target ) {
-		$this->mutatedWikitext = str_replace( $this->target, $target, $this->mutatedWikitext );
+		$this->setText(
+			str_replace( $this->target, $target, $this->getCurrentWikitext() )
+		);
 		$this->target = $target;
 	}
 
-	public function setParam( $index, $value ) {
+	/**
+	 * @param int|string $index
+	 * @param string $value
+	 * @return bool
+	 */
+	public function setParam( $index, $value ): bool {
 		if ( isset( $this->params[$index] ) ) {
-			$this->mutatedWikitext = str_replace( $this->params[$index], $value, $this->mutatedWikitext );
+			if ( $value === $this->params[$index] ) {
+				return true;
+			}
+			$this->subOutNested();
+			if ( is_int( $index ) ) {
+				$this->setText( preg_replace(
+					'/\|' . $this->params[$index] . '/',
+					'|' . $value, $this->getCurrentWikitext()
+				) );
+			} else {
+				$this->setText( preg_replace(
+					'/\|' . $index . '=' . $this->params[$index] . '/',
+					"|$index=$value", $this->getCurrentWikitext()
+				) );
+			}
 			$this->params[$index] = $value;
 		}
+		$this->restoreNested();
+
+		return false;
 	}
 
-	public function getOriginalWikitext(): string {
-		return $this->originalWikitext;
+	private function subOutNested() {
+
 	}
 
-	public function getCurrentWikitext(): string {
-		return $this->mutatedWikitext;
+	private function restoreNested() {
+
 	}
 }

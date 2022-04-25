@@ -1,12 +1,11 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
 
 return [
 	// TODO: Better name => it can produce any type of parser, for CMs other than wikitext,
 	// but calling it ParserFactory collides with MW service
-	'WikitextParserFactory' => static function( \MediaWiki\MediaWikiServices $services ) {
+	'WikitextParserFactory' => static function ( \MediaWiki\MediaWikiServices $services ) {
 		$processorRegistry = $GLOBALS['mwsgWikitextNodeProcessorRegistry'];
 		$processors = [];
 		foreach ( $processorRegistry as $key => $spec ) {
@@ -25,8 +24,7 @@ return [
 			$services->getSlotRoleRegistry()->getRoleHandler( SlotRecord::MAIN )
 		);
 	},
-	'NodePageMutator' => static function( \MediaWiki\MediaWikiServices $services ) {
-
+	'NodePageMutator' => static function ( \MediaWiki\MediaWikiServices $services ) {
 		return new \MWStake\MediaWiki\Component\Wikitext\NodePageMutator();
 	},
 ];

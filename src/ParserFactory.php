@@ -2,7 +2,6 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\MutableRevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
@@ -10,9 +9,7 @@ use MediaWiki\Revision\SlotRoleHandler;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
-use MWParsoid\Config\PageConfigFactory;
-use Wikimedia\Parsoid\Config\SiteConfig;
-use Wikimedia\Parsoid\Parsoid;
+use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 
 class ParserFactory {
 	/** @var \MWParsoid\Config\SiteConfig */
@@ -28,6 +25,13 @@ class ParserFactory {
 	/** @var SlotRoleHandler */
 	private $slotRoleHandler;
 
+	/**
+	 * @param array $nodeProcessors
+	 * @param \TitleFactory $titleFactory
+	 * @param RevisionStore $revisionStore
+	 * @param \Parser $parser
+	 * @param SlotRoleHandler $slotRoleHandler
+	 */
 	public function __construct(
 		$nodeProcessors, \TitleFactory $titleFactory, RevisionStore $revisionStore,
 		\Parser $parser, SlotRoleHandler $slotRoleHandler
@@ -42,7 +46,7 @@ class ParserFactory {
 
 	/**
 	 * Parse raw wikitext
-
+	 *
 	 * @param string $text
 	 * @return WikitextParser
 	 */
@@ -68,9 +72,14 @@ class ParserFactory {
 			default:
 				throw new \Exception( "Not supported content model: $cm" );
 		}
-
 	}
 
+	/**
+	 * @param string $text
+	 * @param \Title $title
+	 * @return RevisionRecord
+	 * @throws \MWException
+	 */
 	private function getRevisionForText( $text, $title ): RevisionRecord {
 		$content = new \WikitextContent( $text );
 		$revisionRecord = new MutableRevisionRecord( $title );
@@ -86,7 +95,7 @@ class ParserFactory {
 
 	/**
 	 * Page config object for parsoid
-	 *
+	 * @param RevisionRecord $record
 	 * @return PageConfig
 	 */
 	private function getPageConfig( RevisionRecord $record ) {
