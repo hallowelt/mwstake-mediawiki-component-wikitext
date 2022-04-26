@@ -53,26 +53,39 @@ class Transclusion extends MutableNode {
 	/**
 	 * @param int|string $index
 	 * @param string $value
+	 * @param bool $allowNew
 	 * @return bool
 	 */
-	public function setParam( $index, $value ): bool {
+	public function setParam( $index, $value, $allowNew = false ): bool {
+		if ( !$allowNew && !isset( $this->params[$index] ) ) {
+			return false;
+		}
+		$search = '';
+		$replacement = '';
 		if ( isset( $this->params[$index] ) ) {
 			if ( $value === $this->params[$index] ) {
 				return true;
 			}
 			if ( is_int( $index ) ) {
-				$this->setText( preg_replace(
-					'/\|' . $this->params[$index] . '/',
-					'|' . $value, $this->getCurrentWikitext()
-				) );
+				$search = '/\|' . $this->params[$index] . '/';
+				$replacement = '|' . $value;
 			} else {
-				$this->setText( preg_replace(
-					'/\|' . $index . '=' . $this->params[$index] . '/',
-					"|$index=$value", $this->getCurrentWikitext()
-				) );
+				$search = '/\|' . $index . '=' . $this->params[$index] . '/';
+				$replacement = "|$index=$value";
 			}
-			$this->params[$index] = $value;
+		} else {
+			$search = '/\}\}/';
+			if ( is_int( $index ) ) {
+				$replacement = "|$value}}";
+			} else {
+				$replacement = "|$index=$value}}";
+			}
 		}
+		$this->setText( preg_replace(
+			$search,
+			$replacement, $this->getCurrentWikitext()
+		) );
+		$this->params[$index] = $value;
 
 		return false;
 	}
