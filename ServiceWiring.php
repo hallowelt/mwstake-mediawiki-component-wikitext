@@ -24,7 +24,4 @@ return [
 			$services->getSlotRoleRegistry()->getRoleHandler( SlotRecord::MAIN )
 		);
 	},
-	'NodePageMutator' => static function ( \MediaWiki\MediaWikiServices $services ) {
-		return new \MWStake\MediaWiki\Component\Wikitext\NodePageMutator();
-	},
 ];

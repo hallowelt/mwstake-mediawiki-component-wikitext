@@ -2,28 +2,28 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
-use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Revision\MutableRevisionRecord;
+use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Storage\RevisionRecord;
+use MediaWiki\Storage\SlotRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
+use MWStake\MediaWiki\Component\Wikitext\INode;
+use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 
-class WikitextParser implements IParser {
+class WikitextParser extends MutableParser implements IParser {
 	/** @var Parsoid */
 	private $parsoid;
 	/** @var PageConfig */
 	private $pageConfig;
-	/** @var RevisionRecord */
-	private $revision;
 	/** @var INodeProcessor[] */
 	private $nodeProcessors;
 	/** @var INode[] */
 	private $nodes = [];
-	/** @var array */
-	private $rawWikitext = [];
 	/** @var \DOMDocument|null */
 	private $dom = null;
 
@@ -38,7 +38,7 @@ class WikitextParser implements IParser {
 		RevisionRecord $revision, $nodeProcessors, SiteConfig $siteConfig,
 		DataAccess $dataAccess, PageConfig $pageConfig
 	) {
-		$this->revision = $revision;
+		parent::__construct( $revision );
 		$this->parsoid = new Parsoid( $siteConfig, $dataAccess );
 		$this->pageConfig = $pageConfig;
 		$this->nodeProcessors = $nodeProcessors;
@@ -59,7 +59,7 @@ class WikitextParser implements IParser {
 		// There might be sligh differences between Parsoid-parsed WT and raw WT
 		// Convert back to WT and consider that the source text of the page
 		// This ensures that mutating the page will reliably replace nodes
-		$this->rawWikitext = $this->parsoidHtmlToWikitext( $data->html );
+		$this->setRawWikitext( $this->parsoidHtmlToWikitext( $data->html ) );
 
 		$this->dom = new \DOMDocument();
 		// DOMDocument does not like HTML5 tags (it loads them fine, just complains)
@@ -69,26 +69,6 @@ class WikitextParser implements IParser {
 		$this->processDOMNode( $this->dom, $nodeType );
 
 		return $this->nodes;
-	}
-
-	/**
-	 * @param IMutableNode $node
-	 * @return string|null
-	 */
-	public function getMutatedText( IMutableNode $node ): ?string {
-		if ( $node->getOriginalWikitext() === $node->getCurrentWikitext() ) {
-			return null;
-		}
-		return str_replace(
-			$node->getOriginalWikitext(), $node->getCurrentWikitext(), $this->rawWikitext
-		);
-	}
-
-	/**
-	 * @return \MediaWiki\Revision\RevisionRecord
-	 */
-	public function getRevision(): \MediaWiki\Revision\RevisionRecord {
-		return $this->revision;
 	}
 
 	/**
@@ -122,6 +102,9 @@ class WikitextParser implements IParser {
 		foreach ( $this->nodeProcessors as $key => $processor ) {
 			if ( $nodeType && $nodeType !== $key ) {
 				// Not requested
+				continue;
+			}
+			if ( !$processor instanceof INodeProcessor ) {
 				continue;
 			}
 			$matches = $processor->matchCallback( $node, $attributes );

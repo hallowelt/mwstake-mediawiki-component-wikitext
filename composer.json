@@ -29,7 +29,7 @@
 	},
 	"scripts": {
 		"phpunit": [
-			"vendor/phpunit/phpunit/phpunit --configuration .phpunit.xml"
+			"../../../tests/phpunit/phpunit.php -c .phpunit.xml"
 		],
 		"test": [
 			"parallel-lint . --exclude vendor --exclude node_modules",

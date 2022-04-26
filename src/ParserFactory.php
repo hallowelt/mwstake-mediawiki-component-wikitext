@@ -9,6 +9,7 @@ use MediaWiki\Revision\SlotRoleHandler;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
+use MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 
 class ParserFactory {
@@ -72,6 +73,16 @@ class ParserFactory {
 			default:
 				throw new \Exception( "Not supported content model: $cm" );
 		}
+	}
+
+	public function newEmptyMenuParser(): MenuParser {
+		$title = $this->titleFactory->newMainPage();
+		$record = $this->getRevisionForText( $text, $title );
+		return $this->newMenuParser( $record );
+	}
+
+	public function newMenuParser( RevisionRecord $record ): MenuParser {
+		return new MenuParser( $record );
 	}
 
 	/**
