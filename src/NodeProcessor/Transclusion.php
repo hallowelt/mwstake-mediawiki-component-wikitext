@@ -18,6 +18,13 @@ class Transclusion implements IParsoidNodeProcessor {
 	/**
 	 * @inheritDoc
 	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'transclusion';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function matchAttributes(): array {
 		return [
 			'typeof' => 'mw:Transclusion',
@@ -56,6 +63,14 @@ class Transclusion implements IParsoidNodeProcessor {
 			$this->parseParams( $template['params'] ),
 			$wikitext
 		);
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		throw new \BadMethodCallException( 'Not implemented' );
 	}
 
 	/**

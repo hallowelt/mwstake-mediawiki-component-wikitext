@@ -20,7 +20,7 @@ abstract class MutableParser implements IMutator {
 	/** @var INodeProcessor[] */
 	private $nodeProcessors;
 	/** @var array */
-	private $rawWikitext = [];
+	private $rawWikitext = '';
 	/** @var bool */
 	private $mutated;
 
@@ -61,7 +61,7 @@ abstract class MutableParser implements IMutator {
 	}
 
 	public function saveRevision( $user = null, $comment = '', $flags = 0 ): ?\MediaWiki\Revision\RevisionRecord {
-		if ( $this->mutated ) {
+		if ( !$this->mutated ) {
 			return null;
 		}
 		$title = $this->revision->getPageAsLinkTarget();

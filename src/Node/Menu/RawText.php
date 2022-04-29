@@ -45,7 +45,7 @@ class RawText extends MenuNode {
 		return [
 			'type' => $this->getType(),
 			'level' => $this->getLevel(),
-			'test' => $this->getNodeText(),
+			'text' => $this->getNodeText(),
 			'wikitext' => $this->getCurrentWikitext()
 		];
 	}

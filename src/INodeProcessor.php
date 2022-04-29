@@ -4,6 +4,19 @@ namespace MWStake\MediaWiki\Component\Wikitext;
 
 interface INodeProcessor {
 	/**
+	 * @return string
+	 */
+	public function supportsNodeType( $type ): bool;
+
+	/**
+	 * Provide a node from serialized node data
+	 *
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode;
+
+	/**
 	 * @param INodeSource $nodeSource
 	 * @return INode
 	 */

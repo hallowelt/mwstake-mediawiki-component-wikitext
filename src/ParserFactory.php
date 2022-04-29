@@ -77,14 +77,14 @@ class ParserFactory {
 		}
 	}
 
-	public function newEmptyMenuParser(): MenuParser {
-		$title = $this->titleFactory->newMainPage();
-		$record = $this->getRevisionForText( $text, $title );
+	public function newEmptyMenuParser( \Title $title ): MenuParser {
+		$title = $title ?? $this->titleFactory->newMainPage();
+		$record = $this->getRevisionForText( '', $title );
 		return $this->newMenuParser( $record );
 	}
 
 	public function newMenuParser( RevisionRecord $record ): MenuParser {
-		return new MenuParser( $record );
+		return new MenuParser( $record, $this->nodeProcessors );
 	}
 
 	/**

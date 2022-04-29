@@ -5,7 +5,9 @@ namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\RevisionRecord;
 use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\IParser;
+use MWStake\MediaWiki\Component\Wikitext\Node\Menu\MenuNode;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class MenuParser extends MutableParser implements IParser {
@@ -22,7 +24,9 @@ class MenuParser extends MutableParser implements IParser {
 		RevisionRecord $revision, $nodeProcessors
 	) {
 		parent::__construct( $revision );
-		$this->nodeProcessors = $nodeProcessors;
+		$this->nodeProcessors = array_filter( $nodeProcessors, static function ( INodeProcessor $processor ) {
+			return $processor instanceof IMenuNodeProcessor;
+		} );
 	}
 
 	/**
@@ -41,15 +45,44 @@ class MenuParser extends MutableParser implements IParser {
 		return $this->nodes;
 	}
 
-	private function tryGetNode( $line ) {
-		foreach ( $this->nodeProcessors as $key => $processor ) {
-			if ( !( $processor instanceof IMenuNodeProcessor ) ) {
+	/**
+	 * @param array $nodes
+	 * @return mixed
+	 */
+	public function addNodesFromData( array $nodes, $replace = false ) {
+		if ( $replace ) {
+			// Clear wikitext
+			$this->setRawWikitext( '' );
+		}
+		foreach ( $nodes as $nodeData ) {
+			if ( !isset( $nodeData['type'] ) ) {
 				continue;
 			}
-			if ( $processor->matches( $line ) ) {
-				$this->nodes[] = $processor->getNode( new WikitextSource( $line ) );
-				return;
+			foreach ( $this->nodeProcessors as $processor ) {
+				if ( $processor->supportsNodeType( $nodeData['type'] ) ) {
+					$node = $processor->getNodeFromData( $nodeData );
+					if ( !( $node instanceof MenuNode ) ) {
+						continue;
+					}
+					$this->addNode( $node );
+				}
 			}
+		}
+	}
+
+	private function tryGetNode( $line ) {
+		// Menu items are a bit specific, their syntax overlaps
+		// eg, every single node will be matches by raw-text, as it matches everything
+		// Therefore we allow last handling node to be choosen, while registration
+		// is done in order of shrinking scopes (processor that matches most is first)
+		$handlingProcessor = null;
+		foreach ( $this->nodeProcessors as $key => $processor ) {
+			if ( $processor->matches( $line ) ) {
+				$handlingProcessor = $processor;
+			}
+		}
+		if ( $handlingProcessor ) {
+			$this->nodes[] = $handlingProcessor->getNode( new WikitextSource( $line ) );
 		}
 	}
 }

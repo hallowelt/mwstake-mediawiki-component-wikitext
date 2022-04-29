@@ -1,10 +1,17 @@
 <?php
 
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Header as Header;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\KeywordNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\RawTextNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\TwoFoldLinkSpecNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\WikiLinkNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Transclusion;
+
 if ( defined( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION' ) ) {
 	return;
 }
 
-define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.0.0' );
+define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.0.1' );
 
 MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 	->register( 'wikitext', function () {
@@ -16,24 +23,24 @@ MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 
 		$GLOBALS['mwsgWikitextNodeProcessorRegistry'] = [
 			'transclusion' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Transclusion::class
+				'class' => Transclusion::class
 			],
 			'header' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Header::class
+				'class' => Header::class
+			],
+			'menu-raw-text' => [
+				'class' => RawTextNodeProcessor::class
 			],
 			'menu-keyword' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\KeywordNodeProcessor::class
+				'class' => KeywordNodeProcessor::class
 			],
 			'menu-wiki-link' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\WikiLinkNodeProcessor::class,
+				'class' => WikiLinkNodeProcessor::class,
 				'services' => [ 'TitleFactory' ]
 			],
 			'menu-two-fold-link-spec' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\TwoFoldLinkSpecNodeProcessor::class,
+				'class' => TwoFoldLinkSpecNodeProcessor::class,
 				'services' => [ 'TitleFactory' ]
-			],
-			'menu-raw-text' => [
-				'class' => \MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\RawTextNodeProcessor::class
 			],
 		];
 	} );

@@ -18,6 +18,13 @@ class Header implements IParsoidNodeProcessor {
 	/**
 	 * @inheritDoc
 	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'header';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function matchAttributes(): array {
 		return [];
 	}
@@ -39,6 +46,14 @@ class Header implements IParsoidNodeProcessor {
 			$source->getDOMNode(),
 			$wikitext
 		);
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		throw new \BadMethodCallException( 'Not implemented' );
 	}
 
 	/**

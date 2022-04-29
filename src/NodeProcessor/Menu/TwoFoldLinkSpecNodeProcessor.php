@@ -38,4 +38,24 @@ class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 
 		return new TwoFoldLinkSpec( $target, $label, $source->getWikitext(), $this->titleFactory );
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'menuitem-twofoldspec';
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		return new TwoFoldLinkSpec(
+			$data['target'],
+			$data['label'],
+			$data['wikitext'],
+			$this->titleFactory
+		);
+	}
 }

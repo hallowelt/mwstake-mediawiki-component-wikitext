@@ -43,4 +43,25 @@ class WikiLinkNodeProcessor extends MenuNodeProcessor {
 			$source->getWikitext(), $this->titleFactory
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'menuitem-wikilink';
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		return new WikiLink(
+			$data['level'],
+			$data['target'],
+			$data['label'],
+			$data['wikitext'],
+			$this->titleFactory
+		);
+	}
 }

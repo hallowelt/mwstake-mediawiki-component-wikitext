@@ -27,4 +27,23 @@ class RawTextNodeProcessor extends MenuNodeProcessor {
 			$source->getWikitext()
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'menuitem-rawtext';
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		return new RawText(
+			$data['level'],
+			$data['text'],
+			$data['wikitext']
+		);
+	}
 }

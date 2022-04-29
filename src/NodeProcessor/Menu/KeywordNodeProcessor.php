@@ -32,12 +32,36 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getKeywords() {
-		// TODO: Get this for real
+		// TODO: Aint nice
 		return [
 			'SEARCH',
 			'TOOLBOX',
-			'LANGUAGES'
+			'LANGUAGES',
+			'PAGESVISITED',
+			'YOUREDITS'
 		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === 'menuitem-keyword';
+	}
+
+	/**
+	 * @param array $data
+	 * @return INode
+	 */
+	public function getNodeFromData( array $data ): INode {
+		return new Keyword(
+			$data['level'],
+			$data['keyword'],
+			$data['wikitext']
+		);
 	}
 }
