@@ -12,9 +12,7 @@ use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
 use MWStake\MediaWiki\Component\Wikitext\IMutator;
 use MWStake\MediaWiki\Component\Wikitext\INode;
 use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
-use Wikimedia\Parsoid\Parsoid;
 
 abstract class MutableParser implements IMutator {
 	/** @var RevisionRecord */
@@ -82,10 +80,9 @@ abstract class MutableParser implements IMutator {
 		}
 
 		return false;
-
 	}
 
-	public function addNode( INode $node, $mode = 'append', $newline = true ): bool {
+	public function addNode( INode $node, $mode = 'append', $newline = true ) {
 		$newText = $node instanceof IMutableNode ? $node->getCurrentWikitext() : $node->getOriginalWikitext();
 		switch ( $mode ) {
 			case 'prepend':
@@ -109,19 +106,39 @@ abstract class MutableParser implements IMutator {
 		if ( $node->getOriginalWikitext() === $node->getCurrentWikitext() ) {
 			return true;
 		}
+		if ( !$this->nodeExistsInText( $node ) ) {
+			return false;
+		}
 		$this->rawWikitext = str_replace(
 			$node->getOriginalWikitext(), $node->getCurrentWikitext(), $this->rawWikitext
 		);
 		$this->setRevisionContent();
+
+		return true;
 	}
 
 	public function removeNode( INode $node ): bool {
-		$nodeText = $node instanceof IMutableNode ? $node->getCurrentWikitext() : $node->getOriginalWikitext();
+		if ( !$this->nodeExistsInText( $node ) ) {
+			return false;
+		}
+
+		$nodeText = preg_quote( $node->getOriginalWikitext() );
 		$this->rawWikitext = preg_replace(
-			"/\n{$nodeText}|{$nodeText}|{$nodeText}\n",
+			"/\n{$nodeText}|{$nodeText}|{$nodeText}\n/",
 			'', $this->rawWikitext
 		);
 		$this->setRevisionContent();
+
+		return true;
+	}
+
+	/**
+	 * @param INode $node
+	 * @return false|int
+	 */
+	private function nodeExistsInText( INode $node ): bool {
+		$toTest = preg_quote( $node->getOriginalWikitext() );
+		return (bool)preg_match( '/' . $toTest . '/', $this->rawWikitext );
 	}
 
 	private function setRevisionContent() {

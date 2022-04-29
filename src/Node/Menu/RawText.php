@@ -13,6 +13,10 @@ class RawText extends MenuNode {
 		$this->text = $text;
 	}
 
+	public function getType(): string {
+		return 'menuitem-rawtext';
+	}
+
 	/**
 	 * @param string $text
 	 */
@@ -32,5 +36,17 @@ class RawText extends MenuNode {
 	 */
 	public function getCurrentWikitext(): string {
 		return "{$this->getLevelString()} {$this->getNodeText()}";
+	}
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return [
+			'type' => $this->getType(),
+			'level' => $this->getLevel(),
+			'test' => $this->getNodeText(),
+			'wikitext' => $this->getCurrentWikitext()
+		];
 	}
 }

@@ -64,4 +64,16 @@ class Header extends MutableNode {
 		);
 		$this->text = $value;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return [
+			'type' => $this->getType(),
+			'level' => $this->getLevel(),
+			'headerText' => $this->getHeaderText(),
+			'wikitext' => $this->getCurrentWikitext()
+		];
+	}
 }

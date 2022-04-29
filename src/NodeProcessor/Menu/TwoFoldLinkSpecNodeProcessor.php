@@ -2,11 +2,10 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\INode;
-use \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec;
-use MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 	/** @var \TitleFactory */
@@ -24,19 +23,19 @@ class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 	 * @return bool
 	 */
 	public function matches( $wikitext ): bool {
-		return (bool) preg_match( '/^(\*{1,})\s{0,}(.{1,}\|.{1,}[^\[\]])$/', $wikitext );
+		return (bool)preg_match( '/^(\*{1,})\s{0,}(.{1,}\|.{1,}[^\[\]])$/', $wikitext );
 	}
 
 	/**
-	 * @param string $wikitext
+	 * @param INodeSource|WikitextSource $source
 	 * @return INode
 	 */
-	public function getNode( $wikitext ): INode {
-		$nodeValue = $this->getNodeValue( $wikitext );
+	public function getNode( INodeSource $source ): INode {
+		$nodeValue = $this->getNodeValue( $source->getWikitext() );
 		$bits = explode( '|', $nodeValue );
 		$target = array_shift( $bits );
 		$label = !empty( $bits ) ? array_shift( $bits ) : '';
 
-		return new TwoFoldLinkSpec( $target, $label, $wikitext, $this->titleFactory );
+		return new TwoFoldLinkSpec( $target, $label, $source->getWikitext(), $this->titleFactory );
 	}
 }

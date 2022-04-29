@@ -28,4 +28,11 @@ class TextNode implements INode {
 	public function getOriginalWikitext(): string {
 		return $this->originalWikitext;
 	}
+
+	public function jsonSerialize() {
+		return [
+			'type' => 'text',
+			'wikitext' => $this->getOriginalWikitext()
+		];
+	}
 }

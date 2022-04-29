@@ -89,4 +89,16 @@ class Transclusion extends MutableNode {
 
 		return false;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return [
+			'type' => $this->getType(),
+			'target' => $this->getTarget(),
+			'params' => $this->getParams(),
+			'wikitext' => $this->getCurrentWikitext()
+		];
+	}
 }

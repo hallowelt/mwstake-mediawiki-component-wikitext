@@ -20,6 +20,10 @@ class TwoFoldLinkSpec extends MenuNode {
 		$this->label = $label;
 	}
 
+	public function getType(): string {
+		return 'menuitem-twofoldspec';
+	}
+
 	/**
 	 * @return string
 	 */
@@ -82,5 +86,18 @@ class TwoFoldLinkSpec extends MenuNode {
 	protected function isValidPageName( $target ) {
 		$title = $this->titleFactory->newFromText( $target );
 		return $title instanceof \Title;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return [
+			'type' => $this->getType(),
+			'level' => $this->getLevel(),
+			'target' => $this->getTarget(),
+			'label' => $this->getLabel(),
+			'wikitext' => $this->getCurrentWikitext()
+		];
 	}
 }

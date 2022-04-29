@@ -4,13 +4,9 @@ namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\RevisionRecord;
-use MWParsoid\Config\DataAccess;
-use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
 use MWStake\MediaWiki\Component\Wikitext\IParser;
-use Wikimedia\Parsoid\Config\SiteConfig;
-use Wikimedia\Parsoid\Parsoid;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class MenuParser extends MutableParser implements IParser {
 	/** @var INodeProcessor[] */
@@ -51,7 +47,7 @@ class MenuParser extends MutableParser implements IParser {
 				continue;
 			}
 			if ( $processor->matches( $line ) ) {
-				$this->nodes[] = $processor->getNode( $line );
+				$this->nodes[] = $processor->getNode( new WikitextSource( $line ) );
 				return;
 			}
 		}

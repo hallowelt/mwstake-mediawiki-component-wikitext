@@ -30,6 +30,9 @@ abstract class MenuNodeTest extends TestCase {
 					case 'target':
 						$node->setTarget( $value );
 						break;
+					case 'keyword':
+						$node->setKeyword( $value );
+						break;
 					case 'label':
 						$node->setLabel( $value );
 						break;

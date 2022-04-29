@@ -2,10 +2,10 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\INode;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword;
-use \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class KeywordNodeProcessor extends MenuNodeProcessor {
 	/**
@@ -14,19 +14,22 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 	 */
 	public function matches( $wikitext ): bool {
 		$keywords = $this->getKeywords();
-		return (bool) preg_match(
+		return (bool)preg_match(
 			'/^(\*{1,})\s{0,}(' . implode( '|', $keywords ) . ')$/',
 			$wikitext
 		);
 	}
 
 	/**
-	 * @param string $wikitext
+	 * @param INodeSource|WikitextSource $source
 	 * @return INode
 	 */
-	public function getNode( $wikitext ): INode {
-		return new Keyword( $this->getLevel( $wikitext ), $this->getNodeValue( $wikitext ), $wikitext );
-
+	public function getNode( INodeSource $source ): INode {
+		return new Keyword(
+			$this->getLevel( $source->getWikitext() ),
+			$this->getNodeValue( $source->getWikitext() ),
+			$source->getWikitext()
+		);
 	}
 
 	public function getKeywords() {

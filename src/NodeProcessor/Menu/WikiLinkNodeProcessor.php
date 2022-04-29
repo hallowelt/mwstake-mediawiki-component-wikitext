@@ -2,10 +2,10 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\INode;
-use \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class WikiLinkNodeProcessor extends MenuNodeProcessor {
 	/** @var \TitleFactory */
@@ -23,20 +23,24 @@ class WikiLinkNodeProcessor extends MenuNodeProcessor {
 	 * @return bool
 	 */
 	public function matches( $wikitext ): bool {
-		return (bool) preg_match( '/^(\*{1,})\s{0,}\[\[(.*?)\]\]$/', $wikitext );
+		return (bool)preg_match( '/^(\*{1,})\s{0,}\[\[(.*?)\]\]$/', $wikitext );
 	}
 
 	/**
-	 * @param string $wikitext
+	 * @param INodeSource|WikitextSource $source
 	 * @return INode
 	 */
-	public function getNode( $wikitext ): INode {
-		$link = $this->getNodeValue( $wikitext );
+	public function getNode( INodeSource $source ): INode {
+		$link = $this->getNodeValue( $source->getWikitext() );
 		$stripped = trim( $link, '[]' );
 		$bits = explode( '|', $stripped );
 		$target = array_shift( $bits );
 		$label = !empty( $bits ) ? array_shift( $bits ) : '';
 
-		return new WikiLink( $this->getLevel( $wikitext ), $target, $label, $wikitext, $this->titleFactory );
+		return new WikiLink(
+			$this->getLevel( $source->getWikitext() ),
+			$target, $label,
+			$source->getWikitext(), $this->titleFactory
+		);
 	}
 }

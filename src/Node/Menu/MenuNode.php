@@ -11,7 +11,7 @@ abstract class MenuNode extends MutableNode {
 	/**
 	 * @param int $level
 	 */
-	public function __construct( int $level, $wikitext ) {
+	public function __construct( int $level, $wikitext = '' ) {
 		$this->level = $level;
 		parent::__construct( $wikitext );
 	}
@@ -28,6 +28,13 @@ abstract class MenuNode extends MutableNode {
 	 */
 	public function getLevel(): int {
 		return $this->level;
+	}
+
+	public function getOriginalWikitext(): string {
+		if ( parent::getOriginalWikitext() === '' ) {
+			return $this->getCurrentWikitext();
+		}
+		return parent::getOriginalWikitext();
 	}
 
 	/**

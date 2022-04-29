@@ -2,9 +2,10 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\INode;
 use \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
+use MWStake\MediaWiki\Component\Wikitext\INode;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class RawTextNodeProcessor extends MenuNodeProcessor {
 	/**
@@ -12,15 +13,18 @@ class RawTextNodeProcessor extends MenuNodeProcessor {
 	 * @return bool
 	 */
 	public function matches( $wikitext ): bool {
-		return (bool) preg_match( '/^(\*{1,})([^\{\[\]\}\|]*?)$/', $wikitext );
+		return (bool)preg_match( '/^(\*{1,})([^\{\[\]\}\|]*?)$/', $wikitext );
 	}
 
 	/**
-	 * @param string $wikitext
+	 * @param INodeSource|WikitextSource $source
 	 * @return INode
 	 */
-	public function getNode( $wikitext ): INode {
-		return new RawText( $this->getLevel( $wikitext ), $this->getNodeValue( $wikitext ), $wikitext );
-
+	public function getNode( INodeSource $source ): INode {
+		return new RawText(
+			$this->getLevel( $source->getWikitext() ),
+			$this->getNodeValue( $source->getWikitext() ),
+			$source->getWikitext()
+		);
 	}
 }

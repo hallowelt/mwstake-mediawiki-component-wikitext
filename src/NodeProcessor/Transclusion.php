@@ -3,9 +3,11 @@
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor;
 
 use MWStake\MediaWiki\Component\Wikitext\INode;
-use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
+use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
 
-class Transclusion implements INodeProcessor {
+class Transclusion implements IParsoidNodeProcessor {
 	/**
 	 * @inheritDoc
 	 */
@@ -31,9 +33,13 @@ class Transclusion implements INodeProcessor {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param INodeSource|ParsoidSource $source
+	 * @return INode
 	 */
-	public function getNode( \DOMNode $domNode, $attributes, $wikitext ): INode {
+	public function getNode( INodeSource $source ): INode {
+		$domNode = $source->getDOMNode();
+		$attributes = $source->getAttributes();
+
 		$data = json_decode( $attributes['data-mw'], 1 );
 		$template = null;
 		foreach ( $data['parts'] as $part ) {

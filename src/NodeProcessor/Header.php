@@ -3,9 +3,11 @@
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor;
 
 use MWStake\MediaWiki\Component\Wikitext\INode;
-use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\INodeSource;
+use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
 
-class Header implements INodeProcessor {
+class Header implements IParsoidNodeProcessor {
 	/**
 	 * @inheritDoc
 	 */
@@ -28,12 +30,13 @@ class Header implements INodeProcessor {
 	}
 
 	/**
-	 * @inheritDoc
+	 * @param INodeSource|ParsoidSource $source
+	 * @return INode
 	 */
-	public function getNode( \DOMNode $domNode, $attributes, $wikitext ): INode {
+	public function getNode( INodeSource $source ): INode {
 		return new \MWStake\MediaWiki\Component\Wikitext\Node\Header(
-			$this->extractLevelFromNode( $domNode ),
-			$domNode->nodeValue,
+			$this->extractLevelFromNode( $source->getDOMNode() ),
+			$source->getDOMNode(),
 			$wikitext
 		);
 	}

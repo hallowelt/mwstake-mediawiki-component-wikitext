@@ -2,7 +2,9 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Tests\Node\Menu;
 
-class Keyword extends RawTextNodeTest {
+use MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword;
+
+class KeywordNodeTest extends RawTextNodeTest {
 
 	/**
 	 * @param array $input
@@ -18,6 +20,17 @@ class Keyword extends RawTextNodeTest {
 	}
 
 	protected function provideNode( $input ) {
-		return new Keyword( ...array_values( $input ) );
+		return new Keyword( ...$input );
+	}
+
+	/**
+	 * @return array[]
+	 */
+	public function provideData() {
+		$data = parent::provideData();
+		$data['mutate-level-and-text']['mutate'] = [
+			'level' => $data['mutate-level-and-text']['mutate']['level'],
+			'keyword' => $data['mutate-level-and-text']['mutate']['text'],
+		];
 	}
 }

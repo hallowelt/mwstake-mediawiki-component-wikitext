@@ -1,27 +1,33 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
+use MWStake\MediaWiki\Component\ManifestRegistry\ManifestRegistryFactory;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessorFactory;
+use MWStake\MediaWiki\Component\Wikitext\ParserFactory;
 
 return [
 	// TODO: Better name => it can produce any type of parser, for CMs other than wikitext,
 	// but calling it ParserFactory collides with MW service
-	'WikitextParserFactory' => static function ( \MediaWiki\MediaWikiServices $services ) {
-		$processorRegistry = $GLOBALS['mwsgWikitextNodeProcessorRegistry'];
-		$processors = [];
-		foreach ( $processorRegistry as $key => $spec ) {
-			$processor = $services->getObjectFactory()->createObject( $spec );
-
-			if ( !( $processor instanceof \MWStake\MediaWiki\Component\Wikitext\INodeProcessor ) ) {
-				continue;
-			}
-			$processors[$key] = $processor;
-		}
-		return new \MWStake\MediaWiki\Component\Wikitext\ParserFactory(
-			$processors,
+	'WikitextParserFactory' => static function ( MediaWikiServices $services ) {
+		$processorFactory = $services->getService( 'WikitextNodePreocessorRegistryFactory' );
+		return new ParserFactory(
+			$processorFactory->getAll(),
 			$services->getTitleFactory(),
 			$services->getRevisionStore(),
 			$services->getParser(),
 			$services->getSlotRoleRegistry()->getRoleHandler( SlotRecord::MAIN )
 		);
 	},
+	'WikitextNodePreocessorRegistryFactory' => static function ( MediaWikiServices $services ) {
+		$globalVar = $GLOBALS['mwsgWikitextNodeProcessorRegistry'];
+
+		/** @var ManifestRegistryFactory $manifestAttributeFactory */
+		$manifestAttributeFactory = $services->getService( 'MWStakeManifestRegistryFactory' );
+		$attributeProcessors = $manifestAttributeFactory->get( 'WikitextComponentNodeProcessors' );
+
+		return new NodeProcessorFactory(
+			$globalVar, $attributeProcessors, $services->getObjectFactory()
+		);
+	}
 ];

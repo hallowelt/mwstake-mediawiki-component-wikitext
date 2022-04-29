@@ -26,21 +26,31 @@ class MenuParserTest extends TestCase {
 		$this->assertInstanceOf( WikiLink::class, $nodes[2] );
 		$this->assertInstanceOf( WikiLink::class, $nodes[3] );
 		$this->assertInstanceOf( Keyword::class, $nodes[4] );
+
+		$nodes[2]->setLabel( 'DummyPage' );
+		$parser->replaceNode( $nodes[2] );
+		$nodes[3]->setLabel( 'Foo' );
+		$parser->replaceNode( $nodes[3] );
+		$nodes[4]->setKeyword( 'LANGUAGES' );
+		$nodes[4]->setLevel( 1 );
+		$parser->replaceNode( $nodes[4] );
+		$parser->removeNode( $nodes[1] );
+
+		$newNode = new RawText( 2, 'foo-bar', '' );
+		$parser->addNode( $newNode, 'append', false );
+
+		$this->assertSame(
+			file_get_contents( __DIR__ . '/data/mutated_menu.txt' ),
+			// Cannot save file without a newline at the end, so adding it here manually
+			$parser->getMutatedText() . "\n"
+		);
 	}
 
 	private function getProcessors() {
-		$processorRegistry = $GLOBALS['mwsgWikitextNodeProcessorRegistry'];
-		$processors = [];
-		foreach ( $processorRegistry as $key => $spec ) {
-			$processor = MediaWikiServices::getInstance()->getObjectFactory()->createObject( $spec );
-
-			if ( !( $processor instanceof \MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor ) ) {
-				continue;
-			}
-			$processors[$key] = $processor;
-		}
-
-		return $processors;
+		$processorFactory = MediaWikiServices::getInstance()->getService(
+			'WikitextNodePreocessorRegistryFactory'
+		);
+		return $processorFactory->getAll();
 	}
 
 	private function getRevision( $text ) {

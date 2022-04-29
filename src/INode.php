@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
-interface INode {
+interface INode extends \JsonSerializable {
 	/**
 	 * @return string
 	 */

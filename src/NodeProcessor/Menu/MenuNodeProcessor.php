@@ -3,7 +3,6 @@
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
 use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\INode;
 
 abstract class MenuNodeProcessor implements IMenuNodeProcessor {
 	/** @var array|null */

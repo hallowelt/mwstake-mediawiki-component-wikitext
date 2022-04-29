@@ -11,6 +11,8 @@ use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
+use Parser;
+use TitleFactory;
 
 class ParserFactory {
 	/** @var \MWParsoid\Config\SiteConfig */
@@ -21,21 +23,21 @@ class ParserFactory {
 	private $nodeProcessors;
 	/** @var TitleFactory */
 	private $titleFactory;
-	/** @var \Parser */
+	/** @var Parser */
 	private $parser;
 	/** @var SlotRoleHandler */
 	private $slotRoleHandler;
 
 	/**
-	 * @param array $nodeProcessors
-	 * @param \TitleFactory $titleFactory
+	 * @param INodeProcessor[] $nodeProcessors
+	 * @param TitleFactory $titleFactory
 	 * @param RevisionStore $revisionStore
-	 * @param \Parser $parser
+	 * @param Parser $parser
 	 * @param SlotRoleHandler $slotRoleHandler
 	 */
 	public function __construct(
-		$nodeProcessors, \TitleFactory $titleFactory, RevisionStore $revisionStore,
-		\Parser $parser, SlotRoleHandler $slotRoleHandler
+		$nodeProcessors, TitleFactory $titleFactory, RevisionStore $revisionStore,
+		Parser $parser, SlotRoleHandler $slotRoleHandler
 	) {
 		$this->siteConfig = new \MWParsoid\Config\SiteConfig();
 		$this->dataAccess = new DataAccess( $revisionStore, $parser, \ParserOptions::newFromAnon() );

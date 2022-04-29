@@ -2,16 +2,14 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
-use MediaWiki\Revision\MutableRevisionRecord;
-use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Storage\RevisionRecord;
-use MediaWiki\Storage\SlotRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
-use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
 use MWStake\MediaWiki\Component\Wikitext\INode;
 use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\IParser;
+use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;
+use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 
@@ -29,7 +27,7 @@ class WikitextParser extends MutableParser implements IParser {
 
 	/**
 	 * @param RevisionRecord $revision
-	 * @param array $nodeProcessors
+	 * @param INodeProcessor[] $nodeProcessors
 	 * @param SiteConfig $siteConfig
 	 * @param DataAccess $dataAccess
 	 * @param PageConfig $pageConfig
@@ -104,7 +102,7 @@ class WikitextParser extends MutableParser implements IParser {
 				// Not requested
 				continue;
 			}
-			if ( !$processor instanceof INodeProcessor ) {
+			if ( !$processor instanceof IParsoidNodeProcessor ) {
 				continue;
 			}
 			$matches = $processor->matchCallback( $node, $attributes );
@@ -129,7 +127,8 @@ class WikitextParser extends MutableParser implements IParser {
 
 			// Get WT for the node
 			$wikitext = $this->parsoidHtmlToWikitext( $this->dom->saveHTML( $node ) );
-			$this->nodes[] = $processor->getNode( $node, $attributes, $wikitext );
+			$source = new ParsoidSource( $node, $attributes, $wikitext );
+			$this->nodes[] = $processor->getNode( $source );
 		}
 	}
 

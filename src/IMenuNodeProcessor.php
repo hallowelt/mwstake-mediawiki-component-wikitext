@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
-interface IMenuNodeProcessor {
+interface IMenuNodeProcessor extends INodeProcessor {
 	/**
 	 * @param string $wikitext
 	 * @return bool
@@ -10,8 +10,7 @@ interface IMenuNodeProcessor {
 	public function matches( $wikitext ): bool;
 
 	/**
-	 * @param string $wikitext
-	 * @return INode
+	 * @inheritDoc
 	 */
-	public function getNode( $wikitext ): INode;
+	public function getNode( INodeSource $source ): INode;
 }

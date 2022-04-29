@@ -12,7 +12,7 @@ interface IMutator extends IParser {
 
 	public function saveRevision( $user = null, $comment = '', $flags = 0 ): ?RevisionRecord;
 
-	public function addNode( INode $node, $addLineBreak = true ): bool;
+	public function addNode( INode $node, $mode = 'append', $newline = true );
 
 	public function replaceNode( IMutableNode $node ): bool;
 
