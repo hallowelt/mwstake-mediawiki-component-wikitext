@@ -32,7 +32,7 @@ class RawTextNodeProcessor extends MenuNodeProcessor {
 	 * @inheritDoc
 	 */
 	public function supportsNodeType( $type ): bool {
-		return $type === 'menuitem-rawtext';
+		return $type === 'menu-raw-text';
 	}
 
 	/**
@@ -43,7 +43,7 @@ class RawTextNodeProcessor extends MenuNodeProcessor {
 		return new RawText(
 			$data['level'],
 			$data['text'],
-			$data['wikitext']
+			$data['wikitext'] ?? ''
 		);
 	}
 }

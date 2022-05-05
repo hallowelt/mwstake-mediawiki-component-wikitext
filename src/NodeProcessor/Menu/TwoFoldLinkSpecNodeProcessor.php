@@ -43,7 +43,7 @@ class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 	 * @inheritDoc
 	 */
 	public function supportsNodeType( $type ): bool {
-		return $type === 'menuitem-twofoldspec';
+		return $type === 'menu-two-fold-link-spec';
 	}
 
 	/**
@@ -54,7 +54,7 @@ class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 		return new TwoFoldLinkSpec(
 			$data['target'],
 			$data['label'],
-			$data['wikitext'],
+			$data['wikitext'] ?? '',
 			$this->titleFactory
 		);
 	}

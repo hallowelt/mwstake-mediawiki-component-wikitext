@@ -1,6 +1,6 @@
 <?php
 
-use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Header as Header;
+use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Header;
 use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\KeywordNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\RawTextNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\TwoFoldLinkSpecNodeProcessor;
@@ -11,7 +11,7 @@ if ( defined( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION' ) ) {
 	return;
 }
 
-define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.0.1' );
+define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.0.0' );
 
 MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 	->register( 'wikitext', function () {

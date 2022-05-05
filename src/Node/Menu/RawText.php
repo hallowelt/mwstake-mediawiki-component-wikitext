@@ -14,7 +14,7 @@ class RawText extends MenuNode {
 	}
 
 	public function getType(): string {
-		return 'menuitem-rawtext';
+		return 'menu-raw-text';
 	}
 
 	/**

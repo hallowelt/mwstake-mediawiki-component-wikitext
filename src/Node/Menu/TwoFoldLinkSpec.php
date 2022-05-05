@@ -21,7 +21,7 @@ class TwoFoldLinkSpec extends MenuNode {
 	}
 
 	public function getType(): string {
-		return 'menuitem-twofoldspec';
+		return 'menu-two-fold-link-spec';
 	}
 
 	/**

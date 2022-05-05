@@ -50,7 +50,7 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 	 * @inheritDoc
 	 */
 	public function supportsNodeType( $type ): bool {
-		return $type === 'menuitem-keyword';
+		return $type === 'menu-keyword';
 	}
 
 	/**
@@ -61,7 +61,7 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 		return new Keyword(
 			$data['level'],
 			$data['keyword'],
-			$data['wikitext']
+			$data['wikitext'] ?? ''
 		);
 	}
 }

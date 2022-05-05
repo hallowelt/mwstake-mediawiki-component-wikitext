@@ -17,7 +17,7 @@ class WikiLink extends TwoFoldLinkSpec {
 	}
 
 	public function getType(): string {
-		return 'menuitem-wikilink';
+		return 'menu-wiki-link';
 	}
 
 	/**

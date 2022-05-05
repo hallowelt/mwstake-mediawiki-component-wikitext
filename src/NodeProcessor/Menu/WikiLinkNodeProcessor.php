@@ -48,7 +48,7 @@ class WikiLinkNodeProcessor extends MenuNodeProcessor {
 	 * @inheritDoc
 	 */
 	public function supportsNodeType( $type ): bool {
-		return $type === 'menuitem-wikilink';
+		return $type === 'menu-wiki-link';
 	}
 
 	/**
@@ -60,7 +60,7 @@ class WikiLinkNodeProcessor extends MenuNodeProcessor {
 			$data['level'],
 			$data['target'],
 			$data['label'],
-			$data['wikitext'],
+			$data['wikitext'] ?? '',
 			$this->titleFactory
 		);
 	}
