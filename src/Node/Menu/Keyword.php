@@ -15,7 +15,7 @@ class Keyword extends MenuNode {
 	}
 
 	public function getType(): string {
-		return 'menuitem-keyword';
+		return 'menu-keyword';
 	}
 
 	/**
