@@ -61,7 +61,7 @@ class Transclusion implements IParsoidNodeProcessor {
 		return new \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion(
 			trim( $template['target']['wt'] ),
 			$this->parseParams( $template['params'] ),
-			$wikitext
+			$source->getWikitext()
 		);
 	}
 

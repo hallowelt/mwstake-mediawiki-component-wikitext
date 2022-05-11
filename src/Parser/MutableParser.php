@@ -86,11 +86,9 @@ abstract class MutableParser implements IMutator {
 	}
 
 	/**
-	 * @param INode $node
-	 * @param string $mode
-	 * @param bool $newline
+	 * @inheritDoc
 	 */
-	public function addNode( INode $node, $mode = 'append', $newline = true ) {
+	public function addNode( INode $node, $mode = 'append', $newline = true ): void {
 		$newText = $node instanceof IMutableNode ?
 			$node->getCurrentWikitext() : $node->getOriginalWikitext();
 		switch ( $mode ) {
