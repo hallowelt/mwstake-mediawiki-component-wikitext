@@ -4,6 +4,7 @@ namespace MWStake\MediaWiki\Component\Wikitext;
 
 interface INodeProcessor {
 	/**
+	 * @param string $type
 	 * @return string
 	 */
 	public function supportsNodeType( $type ): bool;

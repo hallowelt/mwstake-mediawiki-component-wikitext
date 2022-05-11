@@ -3,16 +3,12 @@
 namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
 use MediaWiki\Revision\MutableRevisionRecord;
-use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Storage\RevisionRecord;
 use MediaWiki\Storage\SlotRecord;
-use MWParsoid\Config\DataAccess;
-use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
 use MWStake\MediaWiki\Component\Wikitext\IMutator;
 use MWStake\MediaWiki\Component\Wikitext\INode;
 use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
-use Wikimedia\Parsoid\Config\SiteConfig;
 
 abstract class MutableParser implements IMutator {
 	/** @var RevisionRecord */
@@ -26,11 +22,6 @@ abstract class MutableParser implements IMutator {
 
 	/**
 	 * @param RevisionRecord $revision
-	 * @param array $nodeProcessors
-	 * @param SiteConfig $siteConfig
-	 * @param DataAccess $dataAccess
-	 * @param PageConfig $pageConfig
-	 * @param RevisionStore $revisionStore
 	 */
 	public function __construct(
 		RevisionRecord $revision
@@ -39,6 +30,9 @@ abstract class MutableParser implements IMutator {
 		$this->mutated = $revision instanceof MutableRevisionRecord;
 	}
 
+	/**
+	 * @param string $raw
+	 */
 	protected function setRawWikitext( $raw ) {
 		$this->rawWikitext = $raw;
 	}
@@ -60,7 +54,16 @@ abstract class MutableParser implements IMutator {
 		return $this->rawWikitext;
 	}
 
-	public function saveRevision( $user = null, $comment = '', $flags = 0 ): ?\MediaWiki\Revision\RevisionRecord {
+	/**
+	 * @param User|null $user
+	 * @param string $comment
+	 * @param int $flags
+	 * @return \MediaWiki\Revision\RevisionRecord|null
+	 * @throws \MWException
+	 */
+	public function saveRevision(
+		$user = null, $comment = '', $flags = 0
+	): ?\MediaWiki\Revision\RevisionRecord {
 		if ( !$this->mutated ) {
 			return null;
 		}
@@ -82,8 +85,14 @@ abstract class MutableParser implements IMutator {
 		return false;
 	}
 
+	/**
+	 * @param INode $node
+	 * @param string $mode
+	 * @param bool $newline
+	 */
 	public function addNode( INode $node, $mode = 'append', $newline = true ) {
-		$newText = $node instanceof IMutableNode ? $node->getCurrentWikitext() : $node->getOriginalWikitext();
+		$newText = $node instanceof IMutableNode ?
+			$node->getCurrentWikitext() : $node->getOriginalWikitext();
 		switch ( $mode ) {
 			case 'prepend':
 				if ( $newline ) {
@@ -102,6 +111,10 @@ abstract class MutableParser implements IMutator {
 		$this->setRevisionContent();
 	}
 
+	/**
+	 * @param IMutableNode $node
+	 * @return bool
+	 */
 	public function replaceNode( IMutableNode $node ): bool {
 		if ( $node->getOriginalWikitext() === $node->getCurrentWikitext() ) {
 			return true;
@@ -117,6 +130,10 @@ abstract class MutableParser implements IMutator {
 		return true;
 	}
 
+	/**
+	 * @param INode $node
+	 * @return bool
+	 */
 	public function removeNode( INode $node ): bool {
 		if ( !$this->nodeExistsInText( $node ) ) {
 			return false;
@@ -141,6 +158,9 @@ abstract class MutableParser implements IMutator {
 		return (bool)preg_match( '/' . $toTest . '/', $this->rawWikitext );
 	}
 
+	/**
+	 * @throws \MWException
+	 */
 	private function setRevisionContent() {
 		$content = new \WikitextContent( $this->rawWikitext );
 		if ( !( $this->revision instanceof MutableRevisionRecord ) ) {

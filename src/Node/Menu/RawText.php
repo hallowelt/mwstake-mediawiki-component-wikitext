@@ -3,16 +3,22 @@
 namespace MWStake\MediaWiki\Component\Wikitext\Node\Menu;
 
 class RawText extends MenuNode {
+	/** @var string */
 	private $text;
 
 	/**
 	 * @param int $level
+	 * @param string $text
+	 * @param string $originalWikitext
 	 */
-	public function __construct( int $level, $text, $originalWikitext ) {
+	public function __construct( int $level, $text, $originalWikitext = '' ) {
 		parent::__construct( $level, $originalWikitext );
 		$this->text = $text;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType(): string {
 		return 'menu-raw-text';
 	}

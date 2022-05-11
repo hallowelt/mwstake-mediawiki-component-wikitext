@@ -12,6 +12,7 @@ class NodeProcessorFactory {
 	/**
 	 * @param array $globalRegistry
 	 * @param ManifestAttributeBasedRegistry $attributeRegistry
+	 * @param ObjectFactory $objectFactory
 	 */
 	public function __construct(
 		array $globalRegistry, ManifestAttributeBasedRegistry $attributeRegistry,
@@ -25,6 +26,7 @@ class NodeProcessorFactory {
 
 	/**
 	 * @param array $registry
+	 * @param ObjectFactory $objectFactory
 	 */
 	private function instantiate( array $registry, ObjectFactory $objectFactory ) {
 		foreach ( $registry as $key => $spec ) {

@@ -11,7 +11,10 @@ class TwoFoldLinkSpec extends MenuNode {
 	private $target;
 
 	/**
-	 * @param int $level
+	 * @param string $target
+	 * @param string $label
+	 * @param string $originalWikitext
+	 * @param \TitleFactory $titleFactory
 	 */
 	public function __construct( $target, $label, $originalWikitext, \TitleFactory $titleFactory ) {
 		parent::__construct( 2, $originalWikitext );
@@ -20,6 +23,9 @@ class TwoFoldLinkSpec extends MenuNode {
 		$this->label = $label;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType(): string {
 		return 'menu-two-fold-link-spec';
 	}

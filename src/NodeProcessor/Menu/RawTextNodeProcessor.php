@@ -2,9 +2,9 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
 use MWStake\MediaWiki\Component\Wikitext\INode;
 use MWStake\MediaWiki\Component\Wikitext\INodeSource;
+use MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
 class RawTextNodeProcessor extends MenuNodeProcessor {

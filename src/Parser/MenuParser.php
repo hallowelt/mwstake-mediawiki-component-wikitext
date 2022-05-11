@@ -24,9 +24,12 @@ class MenuParser extends MutableParser implements IParser {
 		RevisionRecord $revision, $nodeProcessors
 	) {
 		parent::__construct( $revision );
-		$this->nodeProcessors = array_filter( $nodeProcessors, static function ( INodeProcessor $processor ) {
-			return $processor instanceof IMenuNodeProcessor;
-		} );
+		$this->nodeProcessors = array_filter(
+			$nodeProcessors,
+			static function ( INodeProcessor $processor ) {
+				return $processor instanceof IMenuNodeProcessor;
+			}
+		);
 	}
 
 	/**
@@ -47,6 +50,7 @@ class MenuParser extends MutableParser implements IParser {
 
 	/**
 	 * @param array $nodes
+	 * @param bool|null $replace
 	 * @return mixed
 	 */
 	public function addNodesFromData( array $nodes, $replace = false ) {
@@ -70,6 +74,9 @@ class MenuParser extends MutableParser implements IParser {
 		}
 	}
 
+	/**
+	 * @param string $line
+	 */
 	private function tryGetNode( $line ) {
 		// Menu items are a bit specific, their syntax overlaps
 		// eg, every single node will be matches by raw-text, as it matches everything

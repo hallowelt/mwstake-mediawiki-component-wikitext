@@ -8,12 +8,17 @@ class Keyword extends MenuNode {
 
 	/**
 	 * @param int $level
+	 * @param string $keyword
+	 * @param string|null $originalWikitext
 	 */
 	public function __construct( int $level, $keyword, $originalWikitext = null ) {
 		parent::__construct( $level, $originalWikitext );
 		$this->keyword = $keyword;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType(): string {
 		return 'menu-keyword';
 	}
@@ -43,7 +48,7 @@ class Keyword extends MenuNode {
 	}
 
 	/**
-	 * @param $keyword
+	 * @param string $keyword
 	 * @return bool
 	 */
 	private function keywordSupported( $keyword ): bool {

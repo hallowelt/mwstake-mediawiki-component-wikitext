@@ -77,12 +77,21 @@ class ParserFactory {
 		}
 	}
 
+	/**
+	 * @param \Title $title
+	 * @return MenuParser
+	 * @throws \MWException
+	 */
 	public function newEmptyMenuParser( \Title $title ): MenuParser {
 		$title = $title ?? $this->titleFactory->newMainPage();
 		$record = $this->getRevisionForText( '', $title );
 		return $this->newMenuParser( $record );
 	}
 
+	/**
+	 * @param RevisionRecord $record
+	 * @return MenuParser
+	 */
 	public function newMenuParser( RevisionRecord $record ): MenuParser {
 		return new MenuParser( $record, $this->nodeProcessors );
 	}

@@ -5,6 +5,7 @@ namespace MWStake\MediaWiki\Component\Wikitext\Tests\Node;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\MutableRevisionRecord;
 use MediaWiki\Revision\SlotRecord;
+use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec;
@@ -13,6 +14,13 @@ use MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser;
 use PHPUnit\Framework\TestCase;
 
 class MenuParserTest extends TestCase {
+	/**
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::parse
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::addNode
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::removeNode
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::replaceNode
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::getMutatedText
+	 */
 	public function testParsing() {
 		$text = file_get_contents( __DIR__ . '/data/menu.txt' );
 
@@ -46,6 +54,9 @@ class MenuParserTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return INodeProcessor[]
+	 */
 	private function getProcessors() {
 		$processorFactory = MediaWikiServices::getInstance()->getService(
 			'WikitextNodePreocessorRegistryFactory'
@@ -53,6 +64,11 @@ class MenuParserTest extends TestCase {
 		return $processorFactory->getAll();
 	}
 
+	/**
+	 * @param string $text
+	 * @return MutableRevisionRecord
+	 * @throws \MWException
+	 */
 	private function getRevision( $text ) {
 		$content = new \WikitextContent( $text );
 		$title = \Title::newMainPage();

@@ -10,11 +10,31 @@ interface IMutator extends IParser {
 	 */
 	public function getMutatedText(): ?string;
 
+	/**
+	 * @param User|null $user Actor
+	 * @param string $comment
+	 * @param int $flags
+	 * @return RevisionRecord|null
+	 */
 	public function saveRevision( $user = null, $comment = '', $flags = 0 ): ?RevisionRecord;
 
-	public function addNode( INode $node, $mode = 'append', $newline = true );
+	/**
+	 * @param INode $node
+	 * @param string $mode
+	 * @param bool $newline
+	 * @return void
+	 */
+	public function addNode( INode $node, $mode = 'append', $newline = true ): void;
 
+	/**
+	 * @param IMutableNode $node
+	 * @return bool
+	 */
 	public function replaceNode( IMutableNode $node ): bool;
 
+	/**
+	 * @param INode $node
+	 * @return bool
+	 */
 	public function removeNode( INode $node ): bool;
 }
