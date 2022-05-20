@@ -19,7 +19,7 @@ See also [`mwstake/mediawiki-componentloader`](https://github.com/hallowelt/mwst
 - `WikitextParserFactory`
 - `WikitextNodePreocessorRegistryFactory`
 
-# Using the `MenuParser`
+## Using the `MenuParser`
 
 ```php
 /* @var MediaWiki\Storage\RevisionRecord */
