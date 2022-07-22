@@ -50,7 +50,7 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 	 * @inheritDoc
 	 */
 	public function supportsNodeType( $type ): bool {
-		return $type === 'menu-keyword';
+		return str_contains( $type, 'menu-keyword' );
 	}
 
 	/**
