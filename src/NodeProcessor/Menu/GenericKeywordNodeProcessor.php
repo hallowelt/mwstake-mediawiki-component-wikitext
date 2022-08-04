@@ -4,18 +4,36 @@ namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
 use MWStake\MediaWiki\Component\Wikitext\INode;
 use MWStake\MediaWiki\Component\Wikitext\INodeSource;
-use MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword;
+use MWStake\MediaWiki\Component\Wikitext\Node\Menu\GenericKeyword;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
 
-class KeywordNodeProcessor extends MenuNodeProcessor {
+class GenericKeywordNodeProcessor extends KeywordNodeProcessor {
+
+	/**
+	 *
+	 * @var string
+	 */
+	private $type = '';
+
+	/**
+	 *
+	 * @var array
+	 */
+	private $keywords = [];
+
+
+	public function __construct( $type, $keywords ) {
+		$this->type = $type;
+		$this->keywords = $keywords;
+	}
+
 	/**
 	 * @param string $wikitext
 	 * @return bool
 	 */
 	public function matches( $wikitext ): bool {
-		$keywords = $this->getKeywords();
 		return (bool)preg_match(
-			'/^(\*{1,})\s{0,}(' . implode( '|', $keywords ) . ')$/',
+			'/^(\*{1,})\s{0,}(' . implode( '|', $this->keywords ) . ')$/',
 			$wikitext
 		);
 	}
@@ -25,32 +43,13 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 	 * @return INode
 	 */
 	public function getNode( INodeSource $source ): INode {
-		return new Keyword(
+		$node = new GenericKeyword(
+			$this->type,
 			$this->getLevel( $source->getWikitext() ),
 			$this->getNodeValue( $source->getWikitext() ),
 			$source->getWikitext()
 		);
-	}
-
-	/**
-	 * @return string[]
-	 */
-	protected function getKeywords() {
-		// TODO: Aint nice
-		return [
-			'SEARCH',
-			'TOOLBOX',
-			'LANGUAGES',
-			'PAGESVISITED',
-			'YOUREDITS'
-		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function supportsNodeType( $type ): bool {
-		return str_contains( $type, 'menu-keyword' );
+		return $node;
 	}
 
 	/**
@@ -58,10 +57,19 @@ class KeywordNodeProcessor extends MenuNodeProcessor {
 	 * @return INode
 	 */
 	public function getNodeFromData( array $data ): INode {
-		return new Keyword(
+		return new GenericKeyword(
+			$this->type,
 			$data['level'],
 			$data['keyword'],
 			$data['wikitext'] ?? ''
 		);
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function supportsNodeType( $type ): bool {
+		return $type === $this->type;
+	}
+
 }
