@@ -1,5 +1,0 @@
-* https://google.com|Google
-** [[Page|DummyPage]]
-*** [[Page|Foo]]
-* LANGUAGES
-** foo-bar

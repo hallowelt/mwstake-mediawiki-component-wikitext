@@ -79,22 +79,10 @@ class ParserFactory {
 	}
 
 	/**
-	 * @param \Title $title
-	 * @return MenuParser
-	 * @throws \MWException
+	 * @return array
 	 */
-	public function newEmptyMenuParser( \Title $title ): MenuParser {
-		$title = $title ?? $this->titleFactory->newMainPage();
-		$record = $this->getRevisionForText( '', $title );
-		return $this->newMenuParser( $record );
-	}
-
-	/**
-	 * @param RevisionRecord $record
-	 * @return MenuParser
-	 */
-	public function newMenuParser( RevisionRecord $record ): MenuParser {
-		return new MenuParser( $record, $this->nodeProcessors );
+	public function getNodeProcessors(): array {
+		return $this->nodeProcessors;
 	}
 
 	/**
@@ -103,7 +91,7 @@ class ParserFactory {
 	 * @return RevisionRecord
 	 * @throws \MWException
 	 */
-	private function getRevisionForText( $text, $title ): RevisionRecord {
+	public function getRevisionForText( $text, $title ): RevisionRecord {
 		$content = new \WikitextContent( $text );
 		$revisionRecord = new MutableRevisionRecord( $title );
 		$revisionRecord->setSlot(

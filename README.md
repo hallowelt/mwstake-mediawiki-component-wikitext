@@ -17,7 +17,7 @@ See also [`mwstake/mediawiki-componentloader`](https://github.com/hallowelt/mwst
 
 ## Available Services
 - `WikitextParserFactory`
-- `WikitextNodePreocessorRegistryFactory`
+- `WikitextNodeProcessorRegistryFactory`
 
 ## Using the `MenuParser`
 

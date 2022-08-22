@@ -1,17 +1,13 @@
 <?php
 
 use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Header;
-use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\KeywordNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\RawTextNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\TwoFoldLinkSpecNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu\WikiLinkNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Transclusion;
 
 if ( defined( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION' ) ) {
 	return;
 }
 
-define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.0.4' );
+define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '3.1.0' );
 
 MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 	->register( 'wikitext', function () {
@@ -27,20 +23,6 @@ MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 			],
 			'header' => [
 				'class' => Header::class
-			],
-			'menu-raw-text' => [
-				'class' => RawTextNodeProcessor::class
-			],
-			'menu-keyword' => [
-				'class' => KeywordNodeProcessor::class
-			],
-			'menu-wiki-link' => [
-				'class' => WikiLinkNodeProcessor::class,
-				'services' => [ 'TitleFactory' ]
-			],
-			'menu-two-fold-link-spec' => [
-				'class' => TwoFoldLinkSpecNodeProcessor::class,
-				'services' => [ 'TitleFactory' ]
-			],
+			]
 		];
 	} );
