@@ -13,7 +13,7 @@ class WikiLinkTest extends TwoFoldLinkSpecTest {
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink::setLabel
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink::setTarget
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\WikiLink::getCurrentData
 	 */
 	public function testNode( $input, $mutate, $expected ) {
 		parent::testNode( $input, $mutate, $expected );

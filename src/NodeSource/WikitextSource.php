@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeSource;
 
-use MWStake\MediaWiki\Component\Wikitext\INodeSource;
+use MWStake\MediaWiki\Lib\Nodes\INodeSource;
 
 /**
  * Represents source data needed to process the node

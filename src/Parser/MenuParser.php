@@ -5,10 +5,11 @@ namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\RevisionRecord;
 use MWStake\MediaWiki\Component\Wikitext\IMenuNodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\IParser;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\MenuNode;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
+use MWStake\MediaWiki\Lib\Nodes\INode;
+use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
+use MWStake\MediaWiki\Lib\Nodes\IParser;
 
 class MenuParser extends MutableParser implements IParser {
 	/** @var INodeProcessor[] */

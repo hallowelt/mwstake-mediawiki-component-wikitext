@@ -45,7 +45,7 @@ class Transclusion extends MutableNode {
 	 */
 	public function setTarget( $target ) {
 		$this->setText(
-			str_replace( $this->target, $target, $this->getCurrentWikitext() )
+			str_replace( $this->target, $target, $this->getCurrentData() )
 		);
 		$this->target = $target;
 	}
@@ -83,7 +83,7 @@ class Transclusion extends MutableNode {
 		}
 		$this->setText( preg_replace(
 			$search,
-			$replacement, $this->getCurrentWikitext()
+			$replacement, $this->getCurrentData()
 		) );
 		$this->params[$index] = $value;
 
@@ -98,7 +98,7 @@ class Transclusion extends MutableNode {
 			'type' => $this->getType(),
 			'target' => $this->getTarget(),
 			'params' => $this->getParams(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

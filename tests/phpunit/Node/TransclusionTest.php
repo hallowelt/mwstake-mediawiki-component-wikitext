@@ -13,7 +13,7 @@ class TransclusionTest extends TestCase {
 	 * @param string $expected
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion::setParam
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion::getCurrentData
 	 */
 	public function testPropertyMutation( $input, $mutate, $expected, $allowNew = false ) {
 		$node = new Transclusion( ...array_values( $input ) );
@@ -22,7 +22,7 @@ class TransclusionTest extends TestCase {
 			$node->setParam( $index, $value, $allowNew );
 		}
 
-		$this->assertSame( $expected, $node->getCurrentWikitext() );
+		$this->assertSame( $expected, $node->getCurrentData() );
 	}
 
 	public function provideData() {

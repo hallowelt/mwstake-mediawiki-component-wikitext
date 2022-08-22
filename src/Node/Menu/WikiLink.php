@@ -36,7 +36,7 @@ class WikiLink extends TwoFoldLinkSpec {
 	/**
 	 * @return string
 	 */
-	public function getCurrentWikitext(): string {
+	public function getCurrentData(): string {
 		if ( trim( $this->getLabel() ) !== '' ) {
 			return "{$this->getLevelString()} [[{$this->getTarget()}|{$this->getLabel()}]]";
 		}

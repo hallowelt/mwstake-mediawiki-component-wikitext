@@ -60,7 +60,7 @@ class Header extends MutableNode {
 			return;
 		}
 		$this->setText(
-			preg_replace( "/{$this->text}/", $value, $this->getCurrentWikitext() )
+			preg_replace( "/{$this->text}/", $value, $this->getCurrentData() )
 		);
 		$this->text = $value;
 	}
@@ -73,7 +73,7 @@ class Header extends MutableNode {
 			'type' => $this->getType(),
 			'level' => $this->getLevel(),
 			'headerText' => $this->getHeaderText(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

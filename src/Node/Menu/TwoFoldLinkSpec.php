@@ -73,7 +73,7 @@ class TwoFoldLinkSpec extends MenuNode {
 	/**
 	 * @return string
 	 */
-	public function getCurrentWikitext(): string {
+	public function getCurrentData(): string {
 		return "** {$this->getTarget()}|{$this->getLabel()}";
 	}
 
@@ -103,7 +103,7 @@ class TwoFoldLinkSpec extends MenuNode {
 			'level' => $this->getLevel(),
 			'target' => $this->getTarget(),
 			'label' => $this->getLabel(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

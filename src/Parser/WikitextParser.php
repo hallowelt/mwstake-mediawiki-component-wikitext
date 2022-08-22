@@ -5,11 +5,11 @@ namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
-use MWStake\MediaWiki\Component\Wikitext\INode;
-use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
-use MWStake\MediaWiki\Component\Wikitext\IParser;
 use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
+use MWStake\MediaWiki\Lib\Nodes\INode;
+use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
+use MWStake\MediaWiki\Lib\Nodes\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 

@@ -13,7 +13,7 @@ class KeywordNodeTest extends RawTextNodeTest {
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword::setKeyword
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword::getKeyword
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\Keyword::getCurrentData
 	 */
 	public function testNode( $input, $mutate, $expected ) {
 		parent::testNode( $input, $mutate, $expected );

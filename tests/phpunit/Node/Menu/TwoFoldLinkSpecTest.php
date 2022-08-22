@@ -13,7 +13,7 @@ class TwoFoldLinkSpecTest extends MenuNodeTest {
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec::setLabel
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec::setTarget
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec::getCurrentData
 	 */
 	public function testNode( $input, $mutate, $expected ) {
 		parent::testNode( $input, $mutate, $expected );

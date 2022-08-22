@@ -40,7 +40,7 @@ class RawText extends MenuNode {
 	/**
 	 * @return string
 	 */
-	public function getCurrentWikitext(): string {
+	public function getCurrentData(): string {
 		return "{$this->getLevelString()} {$this->getNodeText()}";
 	}
 
@@ -52,7 +52,7 @@ class RawText extends MenuNode {
 			'type' => $this->getType(),
 			'level' => $this->getLevel(),
 			'text' => $this->getNodeText(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

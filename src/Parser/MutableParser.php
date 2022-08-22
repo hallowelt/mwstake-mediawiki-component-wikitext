@@ -5,10 +5,11 @@ namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 use MediaWiki\Revision\MutableRevisionRecord;
 use MediaWiki\Storage\RevisionRecord;
 use MediaWiki\Storage\SlotRecord;
-use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
-use MWStake\MediaWiki\Component\Wikitext\IMutator;
-use MWStake\MediaWiki\Component\Wikitext\INode;
-use MWStake\MediaWiki\Component\Wikitext\INodeProcessor;
+use MWStake\MediaWiki\Lib\Nodes\IMutableNode;
+use MWStake\MediaWiki\Lib\Nodes\IMutator;
+use MWStake\MediaWiki\Lib\Nodes\INode;
+use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
+use User;
 
 abstract class MutableParser implements IMutator {
 	/** @var RevisionRecord */
@@ -90,7 +91,7 @@ abstract class MutableParser implements IMutator {
 	 */
 	public function addNode( INode $node, $mode = 'append', $newline = true ): void {
 		$newText = $node instanceof IMutableNode ?
-			$node->getCurrentWikitext() : $node->getOriginalWikitext();
+			$node->getCurrentData() : $node->getOriginalData();
 		switch ( $mode ) {
 			case 'prepend':
 				if ( $newline ) {
@@ -114,14 +115,14 @@ abstract class MutableParser implements IMutator {
 	 * @return bool
 	 */
 	public function replaceNode( IMutableNode $node ): bool {
-		if ( $node->getOriginalWikitext() === $node->getCurrentWikitext() ) {
+		if ( $node->getOriginalData() === $node->getCurrentData() ) {
 			return true;
 		}
 		if ( !$this->nodeExistsInText( $node ) ) {
 			return false;
 		}
 		$this->rawWikitext = str_replace(
-			$node->getOriginalWikitext(), $node->getCurrentWikitext(), $this->rawWikitext
+			$node->getOriginalData(), $node->getCurrentData(), $this->rawWikitext
 		);
 		$this->setRevisionContent();
 
@@ -137,7 +138,7 @@ abstract class MutableParser implements IMutator {
 			return false;
 		}
 
-		$nodeText = preg_quote( $node->getOriginalWikitext() );
+		$nodeText = preg_quote( $node->getOriginalData() );
 		$this->rawWikitext = preg_replace(
 			"/\n{$nodeText}|{$nodeText}|{$nodeText}\n/",
 			'', $this->rawWikitext
@@ -152,7 +153,7 @@ abstract class MutableParser implements IMutator {
 	 * @return false|int
 	 */
 	private function nodeExistsInText( INode $node ): bool {
-		$toTest = preg_quote( $node->getOriginalWikitext() );
+		$toTest = preg_quote( $node->getOriginalData() );
 		return (bool)preg_match( '/' . $toTest . '/', $this->rawWikitext );
 	}
 

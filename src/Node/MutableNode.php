@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Node;
 
-use MWStake\MediaWiki\Component\Wikitext\IMutableNode;
+use MWStake\MediaWiki\Lib\Nodes\IMutableNode;
 
 abstract class MutableNode extends TextNode implements IMutableNode {
 	/** @var string */
@@ -26,7 +26,7 @@ abstract class MutableNode extends TextNode implements IMutableNode {
 	/**
 	 * @return string
 	 */
-	public function getCurrentWikitext(): string {
+	public function getCurrentData(): string {
 		return $this->mutatedWikitext;
 	}
 }

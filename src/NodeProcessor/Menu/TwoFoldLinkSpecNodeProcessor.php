@@ -2,10 +2,10 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\NodeProcessor\Menu;
 
-use MWStake\MediaWiki\Component\Wikitext\INode;
-use MWStake\MediaWiki\Component\Wikitext\INodeSource;
 use MWStake\MediaWiki\Component\Wikitext\Node\Menu\TwoFoldLinkSpec;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\WikitextSource;
+use MWStake\MediaWiki\Lib\Nodes\INode;
+use MWStake\MediaWiki\Lib\Nodes\INodeSource;
 
 class TwoFoldLinkSpecNodeProcessor extends MenuNodeProcessor {
 	/** @var \TitleFactory */

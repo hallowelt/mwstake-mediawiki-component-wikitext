@@ -41,7 +41,7 @@ abstract class MenuNodeTest extends TestCase {
 		}
 
 		if ( $expected !== 'exception' ) {
-			$this->assertSame( $expected, $node->getCurrentWikitext() );
+			$this->assertSame( $expected, $node->getCurrentData() );
 		}
 	}
 

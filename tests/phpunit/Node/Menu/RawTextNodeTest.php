@@ -11,7 +11,7 @@ class RawTextNodeTest extends MenuNodeTest {
 	 * @param array $mutate
 	 * @param string $expected
 	 * @dataProvider provideData
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText::getCurrentData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText::setLevel
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Menu\RawText::setNodeText
 	 */

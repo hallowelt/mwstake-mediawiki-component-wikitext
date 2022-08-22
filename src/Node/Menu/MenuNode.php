@@ -34,11 +34,11 @@ abstract class MenuNode extends MutableNode {
 	/**
 	 * @return string
 	 */
-	public function getOriginalWikitext(): string {
-		if ( parent::getOriginalWikitext() === '' ) {
-			return $this->getCurrentWikitext();
+	public function getOriginalData() {
+		if ( parent::getOriginalData() === '' ) {
+			return $this->getCurrentData();
 		}
-		return parent::getOriginalWikitext();
+		return parent::getOriginalData();
 	}
 
 	/**

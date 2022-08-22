@@ -22,7 +22,7 @@ class MenuParserTest extends TestCase {
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser::getMutatedText
 	 */
 	public function testParsing() {
-		$text = file_get_contents( __DIR__ . '/data/menu.txt' );
+		$text = file_get_contents( __DIR__ . '/../data/menu.txt' );
 
 		$processors = $this->getProcessors();
 		$revision = $this->getRevision( $text );
@@ -48,7 +48,7 @@ class MenuParserTest extends TestCase {
 		$parser->addNode( $newNode, 'append', false );
 
 		$this->assertSame(
-			file_get_contents( __DIR__ . '/data/mutated_menu.txt' ),
+			file_get_contents( __DIR__ . '/../data/mutated_menu.txt' ),
 			// Cannot save file without a newline at the end, so adding it here manually
 			$parser->getMutatedText() . "\n"
 		);

@@ -3,6 +3,7 @@
 namespace MWStake\MediaWiki\Component\Wikitext;
 
 use MWStake\MediaWiki\Component\ManifestRegistry\ManifestAttributeBasedRegistry;
+use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use Wikimedia\ObjectFactory\ObjectFactory;
 
 class NodeProcessorFactory {

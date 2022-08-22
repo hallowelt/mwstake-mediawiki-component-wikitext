@@ -2,6 +2,8 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
+use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
+
 interface IParsoidNodeProcessor extends INodeProcessor {
 	/**
 	 * List of tags node matches
@@ -32,9 +34,4 @@ interface IParsoidNodeProcessor extends INodeProcessor {
 	 * and null if no callback logic is set (do not evaluate callback)
 	 */
 	public function matchCallback( \DOMNode $domNode, $attributes ): ?bool;
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getNode( INodeSource $source ): INode;
 }

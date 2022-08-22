@@ -43,7 +43,7 @@ class Keyword extends MenuNode {
 	/**
 	 * @return string
 	 */
-	public function getCurrentWikitext(): string {
+	public function getCurrentData(): string {
 		return "{$this->getLevelString()} {$this->getKeyword()}";
 	}
 
@@ -63,7 +63,7 @@ class Keyword extends MenuNode {
 			'type' => $this->getType(),
 			'level' => $this->getLevel(),
 			'keyword' => $this->getKeyword(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }
