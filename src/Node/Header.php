@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Node;
 
-class Header extends MutableNode {
+class Header extends TextNode {
 	/** @var int */
 	private $level;
 	/** @var string */
@@ -49,7 +49,7 @@ class Header extends MutableNode {
 		}
 		$this->level = $level;
 		$levelString = str_pad( '', $level, '=' );
-		$this->setText( "$levelString{$this->text}$levelString" );
+		$this->setData( "$levelString{$this->text}$levelString" );
 	}
 
 	/**
@@ -59,8 +59,8 @@ class Header extends MutableNode {
 		if ( $value === $this->text ) {
 			return;
 		}
-		$this->setText(
-			preg_replace( "/{$this->text}/", $value, $this->getCurrentWikitext() )
+		$this->setData(
+			preg_replace( "/{$this->text}/", $value, $this->getCurrentData() )
 		);
 		$this->text = $value;
 	}
@@ -73,7 +73,7 @@ class Header extends MutableNode {
 			'type' => $this->getType(),
 			'level' => $this->getLevel(),
 			'headerText' => $this->getHeaderText(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

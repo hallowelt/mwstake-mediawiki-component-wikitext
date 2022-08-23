@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Node;
 
-class Transclusion extends MutableNode {
+class Transclusion extends TextNode {
 	/** @var string */
 	private $target;
 	/** @var array */
@@ -44,8 +44,8 @@ class Transclusion extends MutableNode {
 	 * @param string $target
 	 */
 	public function setTarget( $target ) {
-		$this->setText(
-			str_replace( $this->target, $target, $this->getCurrentWikitext() )
+		$this->setData(
+			str_replace( $this->target, $target, $this->getCurrentData() )
 		);
 		$this->target = $target;
 	}
@@ -81,9 +81,9 @@ class Transclusion extends MutableNode {
 				$replacement = "|$index=$value}}";
 			}
 		}
-		$this->setText( preg_replace(
+		$this->setData( preg_replace(
 			$search,
-			$replacement, $this->getCurrentWikitext()
+			$replacement, $this->getCurrentData()
 		) );
 		$this->params[$index] = $value;
 
@@ -98,7 +98,7 @@ class Transclusion extends MutableNode {
 			'type' => $this->getType(),
 			'target' => $this->getTarget(),
 			'params' => $this->getParams(),
-			'wikitext' => $this->getCurrentWikitext()
+			'wikitext' => $this->getCurrentData()
 		];
 	}
 }

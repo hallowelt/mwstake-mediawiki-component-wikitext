@@ -14,7 +14,7 @@ class HeaderTest extends TestCase {
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Header::setHeaderText
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Header::setLevel
-	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Header::getCurrentWikitext
+	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Header::getCurrentData
 	 */
 	public function testPropertyMutation( $input, $mutate, $expected ) {
 		$node = new Header( ...array_values( $input ) );
@@ -30,7 +30,7 @@ class HeaderTest extends TestCase {
 			}
 		}
 
-		$this->assertSame( $expected, $node->getCurrentWikitext() );
+		$this->assertSame( $expected, $node->getCurrentData() );
 	}
 
 	/**

@@ -2,19 +2,9 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Node;
 
-use MWStake\MediaWiki\Component\Wikitext\INode;
+use MWStake\MediaWiki\Lib\Nodes\MutableNode;
 
-class TextNode implements INode {
-	/** @var string */
-	private $originalWikitext;
-
-	/**
-	 * @param string $wikitext
-	 */
-	public function __construct( $wikitext ) {
-		$this->originalWikitext = $wikitext;
-	}
-
+class TextNode extends MutableNode {
 	/**
 	 * @return string
 	 */
@@ -22,17 +12,10 @@ class TextNode implements INode {
 		return 'text';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getOriginalWikitext(): string {
-		return $this->originalWikitext;
-	}
-
 	public function jsonSerialize() {
 		return [
 			'type' => 'text',
-			'wikitext' => $this->getOriginalWikitext()
+			'wikitext' => $this->getOriginalData()
 		];
 	}
 }
