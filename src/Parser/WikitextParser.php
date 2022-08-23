@@ -57,7 +57,7 @@ class WikitextParser extends MutableParser implements IParser {
 		// There might be sligh differences between Parsoid-parsed WT and raw WT
 		// Convert back to WT and consider that the source text of the page
 		// This ensures that mutating the page will reliably replace nodes
-		$this->setRawWikitext( $this->parsoidHtmlToWikitext( $data->html ) );
+		$this->setRawData( $this->parsoidHtmlToWikitext( $data->html ) );
 
 		$this->dom = new \DOMDocument();
 		// DOMDocument does not like HTML5 tags (it loads them fine, just complains)

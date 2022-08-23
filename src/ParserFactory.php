@@ -9,7 +9,6 @@ use MediaWiki\Revision\SlotRoleHandler;
 use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
-use MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use Parser;

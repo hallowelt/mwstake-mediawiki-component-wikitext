@@ -1,8 +1,6 @@
 ## MediaWiki Stakeholders Group - Components
 # WikiText for MediaWiki
 
-Provides a OOJS based form engine for MediaWiki.
-
 **This code is meant to be executed within the MediaWiki application context. No standalone usage is intended.**
 
 ## Use in a MediaWiki extension
