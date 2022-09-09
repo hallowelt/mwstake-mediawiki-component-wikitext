@@ -13,7 +13,7 @@ use MWStake\MediaWiki\Lib\Nodes\IParser;
 use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 
-class WikitextParser extends MutableParser implements IParser {
+class WikitextParser extends MutableWikitextParser implements IParser {
 	/** @var Parsoid */
 	private $parsoid;
 	/** @var PageConfig */
@@ -43,10 +43,9 @@ class WikitextParser extends MutableParser implements IParser {
 	}
 
 	/**
-	 * @param string|null $nodeType Node type to parse. If null, all will be parsed
 	 * @return INode[]
 	 */
-	public function parse( $nodeType = null ): array {
+	public function parse(): array {
 		// Convert to HTML. This does:
 		// - tokenizes the document, reliably parsing different nodes
 		// - extracts all important info (like params for template, attributes of img...)
@@ -64,7 +63,7 @@ class WikitextParser extends MutableParser implements IParser {
 		libxml_use_internal_errors( true );
 		$this->dom->loadHTML( $data->html );
 		libxml_clear_errors();
-		$this->processDOMNode( $this->dom, $nodeType );
+		$this->processDOMNode( $this->dom );
 
 		return $this->nodes;
 	}
@@ -77,7 +76,7 @@ class WikitextParser extends MutableParser implements IParser {
 	private function processDOMNode( \DOMNode $dom, $nodeType = null ) {
 		foreach ( $dom->childNodes as $node ) {
 			$attributes = $this->extractNodeAttributes( $node );
-			$processChildren = $this->possiblyAddNode( $node, $attributes, $nodeType );
+			$this->possiblyAddNode( $node, $attributes, $nodeType );
 			if ( $node->hasChildNodes() ) {
 				$this->processDOMNode( $node, $nodeType );
 			}
@@ -110,11 +109,11 @@ class WikitextParser extends MutableParser implements IParser {
 				if ( !in_array( $node->nodeName, $processor->matchTag() ) ) {
 					continue;
 				}
-				foreach ( $processor->matchAttributes() as $key => $value ) {
-					if ( !isset( $attributes[$key] ) ) {
+				foreach ( $processor->matchAttributes() as $matchKey => $value ) {
+					if ( !isset( $attributes[$matchKey] ) ) {
 						continue 2;
 					}
-					if ( $value !== '*' && $attributes[$key] !== $value ) {
+					if ( $value !== '*' && $attributes[$matchKey] !== $value ) {
 						continue 2;
 					}
 				}
