@@ -14,8 +14,8 @@ Since 2.0 explicit initialization is required. This can be archived by
 See also [`mwstake/mediawiki-componentloader`](https://github.com/hallowelt/mwstake-mediawiki-componentloader).
 
 ## Available Services
-- `WikitextParserFactory`
-- `WikitextNodeProcessorRegistryFactory`
+- `MWStakeWikitextParserFactory`
+- `MWStakeWikitextNodeProcessorRegistryFactory`
 
 ## Using the `MenuParser`
 
@@ -24,7 +24,7 @@ See also [`mwstake/mediawiki-componentloader`](https://github.com/hallowelt/mwst
 $revision = $this->getRevision();
 
 /* @var MWStake\MediaWiki\Component\Wikitext\ParserFactory */
-$parserFactory = MediaWiki\MediaWikiServices::getInstance()->get( 'WikitextParserFactory' );
+$parserFactory = MediaWiki\MediaWikiServices::getInstance()->get( 'MWStakeWikitextParserFactory' );
 
 /* @var MWStake\MediaWiki\Component\Wikitext\Parser\MenuParser */
 $menuParser = $parserFactory->newMenuParser( $revision );

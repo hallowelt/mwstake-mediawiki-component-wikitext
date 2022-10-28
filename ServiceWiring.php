@@ -10,7 +10,7 @@ return [
 	// TODO: Better name => it can produce any type of parser, for CMs other than wikitext,
 	// but calling it ParserFactory collides with MW service
 	'MWStakeWikitextParserFactory' => static function ( MediaWikiServices $services ) {
-		$processorFactory = $services->getService( 'WikitextNodeProcessorRegistryFactory' );
+		$processorFactory = $services->getService( 'MWStakeWikitextNodeProcessorRegistryFactory' );
 		return new ParserFactory(
 			$processorFactory->getAll(),
 			$services->getTitleFactory(),
