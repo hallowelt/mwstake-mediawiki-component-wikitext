@@ -9,7 +9,7 @@ use MWStake\MediaWiki\Component\Wikitext\ParserFactory;
 return [
 	// TODO: Better name => it can produce any type of parser, for CMs other than wikitext,
 	// but calling it ParserFactory collides with MW service
-	'WikitextParserFactory' => static function ( MediaWikiServices $services ) {
+	'MWStakeWikitextParserFactory' => static function ( MediaWikiServices $services ) {
 		$processorFactory = $services->getService( 'WikitextNodeProcessorRegistryFactory' );
 		return new ParserFactory(
 			$processorFactory->getAll(),
@@ -19,7 +19,7 @@ return [
 			$services->getSlotRoleRegistry()->getRoleHandler( SlotRecord::MAIN )
 		);
 	},
-	'WikitextNodeProcessorRegistryFactory' => static function ( MediaWikiServices $services ) {
+	'MWStakeWikitextNodeProcessorRegistryFactory' => static function ( MediaWikiServices $services ) {
 		$globalVar = $GLOBALS['mwsgWikitextNodeProcessorRegistry'];
 
 		/** @var ManifestRegistryFactory $manifestAttributeFactory */
