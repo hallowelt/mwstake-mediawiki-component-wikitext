@@ -46,9 +46,7 @@ class ParserFactory {
 		Parser $parser, SlotRoleHandler $slotRoleHandler
 	) {
 		$this->services = MediaWikiServices::getInstance();
-
 		$this->siteConfig = $this->services->getParsoidSiteConfig(); //@return SiteConfig
-
 		$this->dataAccess = $this->services->getParsoidDataAccess();
 		$this->parser = $parser;
 		$this->slotRoleHandler = $slotRoleHandler;
