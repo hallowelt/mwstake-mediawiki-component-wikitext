@@ -2,20 +2,24 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Parser\Parsoid\Config\DataAccess;
+use MediaWiki\Parser\Parsoid\Config\PageConfig;
+use MediaWiki\Parser\Parsoid\Config\SiteConfig;
 use MediaWiki\Revision\MutableRevisionRecord;
+use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Revision\SlotRoleHandler;
-use MediaWiki\Storage\RevisionRecord;
-use MWParsoid\Config\DataAccess;
-use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use Parser;
+use SiteConfiguration;
 use TitleFactory;
+use Wikimedia\Parsoid\Mocks\MockSiteConfig;
 
 class ParserFactory {
-	/** @var \MWParsoid\Config\SiteConfig */
+	/** @var SiteConfig */
 	private $siteConfig;
 	/** @var DataAccess */
 	private $dataAccess;
@@ -27,6 +31,8 @@ class ParserFactory {
 	private $parser;
 	/** @var SlotRoleHandler */
 	private $slotRoleHandler;
+	/** @var MediaWikiServices */
+	private $services;
 
 	/**
 	 * @param INodeProcessor[] $nodeProcessors
@@ -39,8 +45,11 @@ class ParserFactory {
 		$nodeProcessors, TitleFactory $titleFactory, RevisionStore $revisionStore,
 		Parser $parser, SlotRoleHandler $slotRoleHandler
 	) {
-		$this->siteConfig = new \MWParsoid\Config\SiteConfig();
-		$this->dataAccess = new DataAccess( $revisionStore, $parser, \ParserOptions::newFromAnon() );
+		$this->services = MediaWikiServices::getInstance();
+
+		$this->siteConfig = $this->services->getParsoidSiteConfig(); //@return SiteConfig
+
+		$this->dataAccess = $this->services->getParsoidDataAccess();
 		$this->parser = $parser;
 		$this->slotRoleHandler = $slotRoleHandler;
 		$this->nodeProcessors = $nodeProcessors;
@@ -109,11 +118,9 @@ class ParserFactory {
 	 * @return PageConfig
 	 */
 	private function getPageConfig( RevisionRecord $record ) {
-		return new PageConfig(
-			$this->parser,
-			\ParserOptions::newFromAnon(),
-			$this->slotRoleHandler,
-			$record->getPageAsLinkTarget(),
+		return $this->services->getParsoidPageConfigFactory()->create(
+			$record->getPage(),
+			$record->getUser(),
 			$record
 		);
 	}

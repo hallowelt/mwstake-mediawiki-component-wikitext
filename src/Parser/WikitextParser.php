@@ -2,15 +2,15 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
-use MediaWiki\Storage\RevisionRecord;
-use MWParsoid\Config\DataAccess;
-use MWParsoid\Config\PageConfig;
+use MediaWiki\Parser\Parsoid\Config\DataAccess;
+use MediaWiki\Parser\Parsoid\Config\PageConfig;
+use MediaWiki\Parser\Parsoid\Config\SiteConfig;
+use MediaWiki\Revision\RevisionRecord;
 use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;
 use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
 use MWStake\MediaWiki\Lib\Nodes\INode;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use MWStake\MediaWiki\Lib\Nodes\IParser;
-use Wikimedia\Parsoid\Config\SiteConfig;
 use Wikimedia\Parsoid\Parsoid;
 
 class WikitextParser extends MutableWikitextParser implements IParser {
