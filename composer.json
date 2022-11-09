@@ -11,8 +11,7 @@
 	"require": {
 		"mwstake/mediawiki-componentloader": "~1",
 		"mwstake/mediawiki-component-manifestregistry": "~2.0",
-		"mwstake/mediawiki-lib-nodes": "~1.0",
-		"wikimedia/parsoid": "^0.16.0-a1@alpha"
+		"mwstake/mediawiki-lib-nodes": "~1.0"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0",
