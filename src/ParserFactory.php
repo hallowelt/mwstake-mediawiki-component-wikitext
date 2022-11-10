@@ -14,9 +14,7 @@ use MediaWiki\Revision\SlotRoleHandler;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use Parser;
-use SiteConfiguration;
 use TitleFactory;
-use Wikimedia\Parsoid\Mocks\MockSiteConfig;
 
 class ParserFactory {
 	/** @var SiteConfig */
