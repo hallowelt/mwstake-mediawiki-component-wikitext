@@ -5,7 +5,7 @@
 
 ## Use in a MediaWiki extension
 
-Add `"mwstake/mediawiki-component-wikitext": "~3"` to the `require` section of your `composer.json` file.
+Add `"mwstake/mediawiki-component-wikitext": "~5"` to the `require` section of your `composer.json` file.
 
 Since 2.0 explicit initialization is required. This can be archived by
 - either adding `"callback": "mwsInitComponents"` to your `extension.json`/`skin.json`
