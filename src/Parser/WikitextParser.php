@@ -2,7 +2,7 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext\Parser;
 
-use MediaWiki\Storage\RevisionRecord;
+use MediaWiki\Revision\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
 use MWStake\MediaWiki\Component\Wikitext\IParsoidNodeProcessor;

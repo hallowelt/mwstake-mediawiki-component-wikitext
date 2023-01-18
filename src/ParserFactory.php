@@ -3,12 +3,13 @@
 namespace MWStake\MediaWiki\Component\Wikitext;
 
 use MediaWiki\Revision\MutableRevisionRecord;
+use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Revision\SlotRoleHandler;
-use MediaWiki\Storage\RevisionRecord;
 use MWParsoid\Config\DataAccess;
 use MWParsoid\Config\PageConfig;
+use MWParsoid\Config\SiteConfig;
 use MWStake\MediaWiki\Component\Wikitext\Parser\WikitextParser;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use Parser;
@@ -39,7 +40,7 @@ class ParserFactory {
 		$nodeProcessors, TitleFactory $titleFactory, RevisionStore $revisionStore,
 		Parser $parser, SlotRoleHandler $slotRoleHandler
 	) {
-		$this->siteConfig = new \MWParsoid\Config\SiteConfig();
+		$this->siteConfig = new SiteConfig();
 		$this->dataAccess = new DataAccess( $revisionStore, $parser, \ParserOptions::newFromAnon() );
 		$this->parser = $parser;
 		$this->slotRoleHandler = $slotRoleHandler;

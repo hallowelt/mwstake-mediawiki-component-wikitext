@@ -20,7 +20,7 @@ See also [`mwstake/mediawiki-componentloader`](https://github.com/hallowelt/mwst
 ## Using the `MenuParser`
 
 ```php
-/* @var MediaWiki\Storage\RevisionRecord */
+/* @var MediaWiki\Revision\RevisionRecord */
 $revision = $this->getRevision();
 
 /* @var MWStake\MediaWiki\Component\Wikitext\ParserFactory */
