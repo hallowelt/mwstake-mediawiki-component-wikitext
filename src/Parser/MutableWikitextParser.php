@@ -81,7 +81,7 @@ abstract class MutableWikitextParser extends MutableParser {
 	/**
 	 * @inheritDoc
 	 */
-	protected function getContentObject() : \Content {
+	protected function getContentObject(): \Content {
 		return new \WikitextContent( $this->rawData );
 	}
 }
