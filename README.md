@@ -13,7 +13,7 @@
 
 - Add `"mwstake/mediawiki-component-wikitext": "~6"` to the `require` section of your `composer.json` file.
 
-Since 2.0 explicit initialization is required. This can be achived by
+Since 2.0 explicit initialization is required. This can be achieved by
 - either adding `"callback": "mwsInitComponents"` to your `extension.json`/`skin.json`
 - or calling `mwsInitComponents();` within you extensions/skins custom `callback` method
 
