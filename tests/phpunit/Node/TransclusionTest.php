@@ -11,6 +11,7 @@ class TransclusionTest extends TestCase {
 	 * @param array $input
 	 * @param array $mutate
 	 * @param string $expected
+	 * @param bool $allowNew
 	 * @dataProvider provideData
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion::setParam
 	 * @covers \MWStake\MediaWiki\Component\Wikitext\Node\Transclusion::getCurrentData
