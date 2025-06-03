@@ -7,7 +7,7 @@ if ( defined( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION' ) ) {
 	return;
 }
 
-define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '6.0.2' );
+define( 'MWSTAKE_MEDIAWIKI_COMPONENT_WIKITEXT_VERSION', '6.0.3' );
 
 MWStake\MediaWiki\ComponentLoader\Bootstrapper::getInstance()
 	->register( 'wikitext', function () {
