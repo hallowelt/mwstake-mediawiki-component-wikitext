@@ -89,7 +89,6 @@ class WikitextParser extends MutableWikitextParser implements IParser {
 	 * @param \DOMNode $node
 	 * @param array $attributes
 	 * @param bool|null $nodeType Only process given nodeType (INodeProcessor key)
-	 * @throws \Exception
 	 */
 	private function possiblyAddNode( \DOMNode $node, $attributes, $nodeType = null ) {
 		/**
