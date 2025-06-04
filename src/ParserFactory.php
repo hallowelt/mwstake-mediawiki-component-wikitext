@@ -2,6 +2,8 @@
 
 namespace MWStake\MediaWiki\Component\Wikitext;
 
+use InvalidArgumentException;
+use LogicException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
@@ -68,7 +70,7 @@ class ParserFactory {
 	/**
 	 * @param RevisionRecord $record
 	 * @return WikitextParser
-	 * @throws \Exception
+	 * @throws LogicException
 	 */
 	public function newRevisionParser( RevisionRecord $record ): WikitextParser {
 		$cm = $record->getContent( SlotRecord::MAIN )->getModel();
@@ -79,7 +81,7 @@ class ParserFactory {
 					$this->getPageConfig( $record )
 				);
 			default:
-				throw new \Exception( "Not supported content model: $cm" );
+				throw new LogicException( "Not supported content model: $cm" );
 		}
 	}
 
@@ -94,7 +96,7 @@ class ParserFactory {
 	 * @param string $text
 	 * @param \Title $title
 	 * @return RevisionRecord
-	 * @throws \MWException
+	 * @throws InvalidArgumentException
 	 */
 	public function getRevisionForText( $text, $title ): RevisionRecord {
 		$content = new WikitextContent( $text );
