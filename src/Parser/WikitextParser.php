@@ -11,6 +11,7 @@ use MWStake\MediaWiki\Component\Wikitext\NodeSource\ParsoidSource;
 use MWStake\MediaWiki\Lib\Nodes\INode;
 use MWStake\MediaWiki\Lib\Nodes\INodeProcessor;
 use MWStake\MediaWiki\Lib\Nodes\IParser;
+use RuntimeException;
 use Wikimedia\Parsoid\Parsoid;
 
 class WikitextParser extends MutableWikitextParser implements IParser {
@@ -89,7 +90,7 @@ class WikitextParser extends MutableWikitextParser implements IParser {
 	 * @param \DOMNode $node
 	 * @param array $attributes
 	 * @param bool|null $nodeType Only process given nodeType (INodeProcessor key)
-	 * @throws \Exception
+	 * @throws RuntimeException
 	 */
 	private function possiblyAddNode( \DOMNode $node, $attributes, $nodeType = null ) {
 		/**
