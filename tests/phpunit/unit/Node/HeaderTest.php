@@ -1,11 +1,11 @@
 <?php
 
-namespace MWStake\MediaWiki\Component\Wikitext\Tests\Node;
+namespace MWStake\MediaWiki\Component\Wikitext\Tests\Unit\Node;
 
+use MediaWikiUnitTestCase;
 use MWStake\MediaWiki\Component\Wikitext\Node\Header;
-use PHPUnit\Framework\TestCase;
 
-class HeaderTest extends TestCase {
+class HeaderTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param array $input
