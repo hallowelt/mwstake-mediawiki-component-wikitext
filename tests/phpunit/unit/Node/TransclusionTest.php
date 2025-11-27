@@ -1,11 +1,11 @@
 <?php
 
-namespace MWStake\MediaWiki\Component\Wikitext\Tests\Node;
+namespace MWStake\MediaWiki\Component\Wikitext\Tests\Unit\Node;
 
+use MediaWikiUnitTestCase;
 use MWStake\MediaWiki\Component\Wikitext\Node\Transclusion;
-use PHPUnit\Framework\TestCase;
 
-class TransclusionTest extends TestCase {
+class TransclusionTest extends MediaWikiUnitTestCase {
 
 	/**
 	 * @param array $input
