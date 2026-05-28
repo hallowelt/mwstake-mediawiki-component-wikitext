@@ -59,7 +59,7 @@ class WikitextParser extends MutableWikitextParser implements IParser {
 		$this->setRawData( $this->parsoidHtmlToWikitext( $data->html ) );
 
 		$this->dom = new \DOMDocument();
-		$html= '<?xml encoding="UTF-8">' . $data->html;
+		$html = '<?xml encoding="UTF-8">' . $data->html;
 		// DOMDocument does not like HTML5 tags (it loads them fine, just complains)
 		libxml_use_internal_errors( true );
 		$this->dom->loadHTML( $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
