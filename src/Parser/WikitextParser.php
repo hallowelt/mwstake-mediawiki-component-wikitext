@@ -61,7 +61,7 @@ class WikitextParser extends MutableWikitextParser implements IParser {
 		$this->dom = new \DOMDocument();
 		// DOMDocument does not like HTML5 tags (it loads them fine, just complains)
 		libxml_use_internal_errors( true );
-		$this->dom->loadHTML( $data->html );
+		$this->dom->loadHTML( '<?xml encoding="UTF-8">' . $data->html );
 		libxml_clear_errors();
 		$this->processDOMNode( $this->dom );
 
