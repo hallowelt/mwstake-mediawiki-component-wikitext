@@ -76,8 +76,7 @@ abstract class MutableWikitextParser extends MutableParser {
 	 * @return false|int
 	 */
 	private function nodeExistsInText( INode $node ): bool {
-		$toTest = preg_quote( $node->getOriginalData() );
-		return (bool)preg_match( '/' . $toTest . '/', $this->rawData );
+		return strpos( $this->rawData, $node->getOriginalData() ) !== false;
 	}
 
 	/**
