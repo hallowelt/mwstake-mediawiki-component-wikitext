@@ -60,34 +60,36 @@ class Transclusion extends TextNode {
 		if ( !$allowNew && !isset( $this->params[$index] ) ) {
 			return false;
 		}
-		$search = '';
-		$replacement = '';
+		$currentData = $this->getCurrentData();
 		if ( isset( $this->params[$index] ) ) {
 			if ( $value === $this->params[$index] ) {
 				return true;
 			}
+			$oldValue = preg_quote( (string)$this->params[$index], '/' );
 			if ( is_int( $index ) ) {
-				$search = '/\|' . $this->params[$index] . '/';
+				$search = '/\|' . $oldValue . '/';
 				$replacement = '|' . $value;
 			} else {
-				$search = '/\|' . $index . '=' . $this->params[$index] . '/';
+				$search = '/\|' . preg_quote( (string)$index, '/' ) . '=' . $oldValue . '/';
 				$replacement = "|$index=$value";
 			}
-		} else {
-			$search = '/\}\}/';
-			if ( is_int( $index ) ) {
-				$replacement = "|$value}}";
-			} else {
-				$replacement = "|$index=$value}}";
+			$updatedData = preg_replace_callback( $search, static fn () => $replacement, $currentData );
+			if ( $updatedData === null || $updatedData === $currentData ) {
+				return false;
 			}
+		} else {
+			$replacement = is_int( $index )
+				? '|' . $value . '}}'
+				: '|' . $index . '=' . $value . '}}';
+			$endPos = strrpos( $currentData, '}}' );
+			if ( $endPos === false ) {
+				return false;
+			}
+			$updatedData = substr_replace( $currentData, $replacement, $endPos, 2 );
 		}
-		$this->setData( preg_replace(
-			$search,
-			$replacement, $this->getCurrentData()
-		) );
+		$this->setData( $updatedData );
 		$this->params[$index] = $value;
-
-		return false;
+		return true;
 	}
 
 	/**

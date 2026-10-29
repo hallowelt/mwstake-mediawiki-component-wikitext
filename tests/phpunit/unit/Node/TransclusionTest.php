@@ -74,6 +74,73 @@ class TransclusionTest extends MediaWikiUnitTestCase {
 				'expected' => "{{DummyTemplate\n|param1=value1|param2=value2\n|param3=dummy}}",
 				'allowNew' => true
 			],
+			'named-param-with-slash' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'role' => 'Role/Management' ],
+					'wikitext' => '{{DummyTemplate|role=Role/Management}}'
+				],
+				'mutate' => [
+					'role' => 'Role/Operations'
+				],
+				'expected' => '{{DummyTemplate|role=Role/Operations}}'
+			],
+			'named-param-with-regex-characters' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'text' => '{{FULLPAGENAMEE}}' ],
+					'wikitext' => '{{DummyTemplate|text={{FULLPAGENAMEE}}}}'
+				],
+				'mutate' => [
+					'text' => 'changed'
+				],
+				'expected' => '{{DummyTemplate|text=changed}}'
+			],
+			'new-param-after-nested-template' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'text' => '{{FULLPAGENAMEE}}' ],
+					'wikitext' => '{{DummyTemplate|text={{FULLPAGENAMEE}}}}'
+				],
+				'mutate' => [
+					'new' => 'value'
+				],
+				'expected' => '{{DummyTemplate|text={{FULLPAGENAMEE}}|new=value}}',
+				'allowNew' => true
+			],
+			'replacement-with-dollar' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'text' => 'old' ],
+					'wikitext' => '{{DummyTemplate|text=old}}'
+				],
+				'mutate' => [
+					'text' => '$1'
+				],
+				'expected' => '{{DummyTemplate|text=$1}}'
+			],
+			'replacement-with-backslash' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'text' => 'old' ],
+					'wikitext' => '{{DummyTemplate|text=old}}'
+				],
+				'mutate' => [
+					'text' => 'C:\\new\\path'
+				],
+				'expected' => '{{DummyTemplate|text=C:\\new\\path}}'
+			],
+			'duplicate-values-are-all-replaced' => [
+				'input' => [
+					'target' => 'DummyTemplate',
+					'params' => [ 'a' => 'old', 'b' => 'old' ],
+					'wikitext' => '{{DummyTemplate|a=old|b=old}}'
+				],
+				'mutate' => [
+					'a' => 'new'
+				],
+				'expected' => '{{DummyTemplate|a=new|b=old}}'
+			],
 		];
 	}
 }
